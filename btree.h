@@ -1,4 +1,4 @@
-#ifndef BTREE__H_
+#ifndef BTREE_H_
 #define BTREE_H_
 #include <vector>
 #include "node.h"
