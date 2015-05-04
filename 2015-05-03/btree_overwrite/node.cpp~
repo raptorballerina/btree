@@ -2,12 +2,10 @@
 
 bool LADYBUG=true;
 
-template <class T>
 node::node(int dgree)
 {
 	degree=dgree;//max number of children
 	maxKeys=dgree-1;
-	parent=nullptr;
 	leaf=true;
 	keys.reserve(dgree);
 	childs.reserve(dgree);
@@ -19,15 +17,13 @@ node::node(int dgree,const std::pair<int,T> &pear)
 {
 	degree=dgree;
 	maxKeys=dgree-1;
-	parent=nullptr;
 	leaf=true;
 	keys.reserve(dgree);
 	childs.reserve(dgree);
 	std::fill(childs.begin(),childs.end(),nullptr);
 	v.push_back(pear);
 }
-/* //LETTING THE TREE HANDLE THE INSERT
-template <class T>
+
 void node::insert(node* nd,const std::pair<int,T> &pear) //INCOMPLETE
 {
 	node *nd=nullptr;
@@ -55,11 +51,9 @@ void node::insert(node* nd,const std::pair<int,T> &pear) //INCOMPLETE
 						
 	}
 }
-*/
-//STILL NEEDS WORK
-template <class T>
+
 void node::split(node* parent){
-	node* left = new node();//instead of this, just use current node as left node and remove extra stuff on the right
+	node* left = new node();
 	node* right = new node();
 	int median = keys.size() / 2;//index of median
 	std::pair<int,T> medianKey;
@@ -77,25 +71,19 @@ void node::split(node* parent){
 	right->addChild[childs[j]];
 	
 	//Insert medianKey into correct place in parent
-	//use getindex and insert on parent
-	
 	//insert left and right child ptrs into correct place in parent
-	//left ptr is same index as above, right ptr is that index + 1
 	//if parent->getNumKeys() > maxKeys, call split on parent
-	//
 	
 }
 
 
 //returns node pointer to traverse down
-template <class T>
 node* node::getNode(const std::pair<int,T> > &pear)
 {
 	int idx=getIndex(pear.first);
 	return childs[idx];
 }
 
-template <class T>
 //return index for insert or exists using binary search
 int node::getIndex(int keyValue)
 {
@@ -116,9 +104,7 @@ int node::getIndex(int keyValue)
 	return idx;
 }
 
-template <class T>
 bool node::keyExists(int keyValue)
-
 {
 	int idx=getIndex(keyValue);
 	//getindex returns keys.size when value greater than all keys
@@ -129,7 +115,6 @@ bool node::keyExists(int keyValue)
 	}
 }
 
-template <class T>
 bool node::deleteKey(int keyValue)
 {
 	int idx=getIndex(keyValue);

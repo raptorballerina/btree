@@ -17,22 +17,9 @@ void bTree::insert(const std::pair<int,T> &pear)
 	while (!itr->isLeaf()){
 		itr = itr->getNode(pear);
 	}
-	int idx = itr->getIndex(pear.first);
-	if (idx == itr->getNumKeys())
-		itr->addKey(pear);
-	else {
-		itr->insertKey(idx,pear);
+	if (itr->getNumKeys() == 0){
+		
 	}
-	if (itr->getNumKeys == itr->getDegree)
-		split(itr);
-}
-
-
-template <class T>
-void bTree::split(nd* current){
-	node* left = new node();
-	node* right = new node();
-	int median = keys.size() / 2;
 }
 
 template <class T>
