@@ -24,8 +24,10 @@ public:
 	int getIndex(int keyValue);
 	bool keyExists(int keyValue);
 	bool deleteKey(int keyValue);
+	bool removeChild(int childIndex);
 	void addKey(std::pair<int,T> pear){keys.add_back(pear);} 
-	void insertKey(std::pair<int,T>pear,int i){keys.insert(keys.begin()+i,pear);};
+	void insertKey(std::pair<int,T>pear,int i){keys.insert(keys.begin()+i,pear);}
+	void insertChild(node* child, int i){childs.insert(childs.begin()+1, child);}
 	void addChild(node* child){childs.add_back(child);}
 	void setChild(node* child, int index){childs[index] = child;};
 	//overloads:

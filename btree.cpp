@@ -10,6 +10,7 @@ void btree::insert(const std::pair<int,T> &pear)
 	//
 }
 
+//Need to figure out how to set parent ptr here. And what to do about root?
 template <class T>
 void bTree::insert(const std::pair<int,T> &pear)
 {
