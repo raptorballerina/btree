@@ -91,7 +91,7 @@ void node::split(node* parent){
 //version that uses current node as left node
 void node::split(){//doesn't need to pass in parent ptr because parent ptr is attribute of node
 	node* right = new node();
-	int median = keys.size() / 2;
+	int median = (keys.size()-1) / 2;
 	std::pair<int,t> medianKey = keys[median];
 	
 	int j = median + 1;
