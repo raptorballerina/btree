@@ -57,7 +57,7 @@ void node::insert(node* nd,const std::pair<int,T> &pear) //INCOMPLETE
 }
 */
 //STILL NEEDS WORK
-template <class T>
+/*template <class T>
 void node::split(node* parent){
 	node* left = new node();//instead of this, just use current node as left node and remove extra stuff on the right
 	node* right = new node();
@@ -81,9 +81,49 @@ void node::split(node* parent){
 	
 	//insert left and right child ptrs into correct place in parent
 	//left ptr is same index as above, right ptr is that index + 1
+	//need to "move over" 
 	//if parent->getNumKeys() > maxKeys, call split on parent
-	//
 	
+	
+}*/
+
+
+//version that uses current node as left node
+void node::split(){//doesn't need to pass in parent ptr because parent ptr is attribute of node
+	node* right = new node();
+	int median = keys.size() / 2;
+	std::pair<int,t> medianKey = keys[median];
+	
+	int j = median + 1;
+	for (; j < keys.size(); j++) {
+		right->addKey(keys[i]);
+		right->addChild(childs[j]);
+	}
+	right->addChild[childs[j];
+	
+	//remove extra keys and child ptrs from current (left) here
+	//we remove (numKeys / 2 + 1) keys and children from back
+	int toRemove = keys.size() / 2 + 1;
+	for (int i = 0; i < toRemove; i++){
+		childs.pop_back();
+		keys.pop_back();
+	}
+	
+	int idxToInsert = parent->getIndex(medianKey.first);//get index to insert key in parent
+	parent->insertKey(mediankey,idxToInsert);//insert key into parent
+	
+	//child ptr to left of the key you just inserted is the same as before, so we don't need to
+	//	do anything there
+	
+	//insert right ptr into position in parent (idxToInsert + 1)
+	parent->insertChild(right,idxToInsert + 1);
+	
+
+			//need to check if we're at root here and do a separate thing for that
+
+	if (parent->getNumKeys() == parent->getDegree())
+		split(*parent);
+		      
 }
 
 
@@ -143,6 +183,9 @@ bool node::deleteKey(int keyValue)
 		return true;
 	}
 }
+
+
+
 
 /*
 template <class T>
