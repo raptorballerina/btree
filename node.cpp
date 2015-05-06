@@ -221,7 +221,8 @@ std::pair<bool,T> node<T>::search(int keyValue)
 
 template <class T>
 void node<T>::inOrder() {
-    for (int i=0;i<nd->keys.size();i++) {
+    int i=0;
+    for (;i<keys.size();i++) {
         if (!leaf) {
             childs[i]->inOrder();
         }
