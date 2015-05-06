@@ -44,9 +44,7 @@ public:
 	//T operator[](int index);
 private:
 	//properties:
-	
 	//objects:
-
 	//functions:
 };
 
