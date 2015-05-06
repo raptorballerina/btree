@@ -1,7 +1,9 @@
-#ifndef BTREE__H_
+#ifndef BTREE_H_
 #define BTREE_H_
 #include <vector>
 #include "node.h"
+#include <iostream>
+
 
 template <class T>
 class btree
@@ -9,13 +11,14 @@ class btree
 public:
 	btree(int dgree,bool preEmptiveSplit=false):root(nullptr),degree(dgree),preSplit(preEmptiveSplit){}
 	int getDegree(){return degree;}
-	void insert(const std::pair<int,T> &pear);
-	bool find(std::pair<int,T>
+    void split(node<T> *current);
+    void insert(std::pair<int,T> &pear);
+//	bool find(std::pair<int,T>
 private:
-	node *root;
+    node<T> *root;
 	int degree;
 	bool preSplit;
-}
+};
 
 #include "btree.cpp"
 

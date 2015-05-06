@@ -1,9 +1,8 @@
 #include "node.h"
-
 bool LADYBUG=true;
 
 template <class T>
-node::node(int dgree)
+node<T>::node(int dgree)
 {
 	degree=dgree;//max number of children
 	maxKeys=dgree-1;
@@ -15,7 +14,7 @@ node::node(int dgree)
 }
 
 template <class T>
-node::node(int dgree,const std::pair<int,T> &pear)
+node<T>::node(int dgree,const std::pair<int,T> &pear)
 {
 	degree=dgree;
 	maxKeys=dgree-1;
@@ -24,7 +23,7 @@ node::node(int dgree,const std::pair<int,T> &pear)
 	keys.reserve(dgree);
 	childs.reserve(dgree);
 	std::fill(childs.begin(),childs.end(),nullptr);
-	v.push_back(pear);
+    keys.push_back(pear);
 }
 /* //LETTING THE TREE HANDLE THE INSERT
 template <class T>
@@ -87,10 +86,18 @@ void node::split(node* parent){
 	
 }*/
 
-
+/* Lol we don't need this either
 //version that uses current node as left node
 void node::split(){//doesn't need to pass in parent ptr because parent ptr is attribute of node
-	node* right = new node();
+
+
+
+	//need to check if we're at root here and do a separate thing for that
+		
+
+
+
+	node* right = new node(degree);
 	int median = (keys.size()-1) / 2;
 	std::pair<int,t> medianKey = keys[median];
 	
@@ -109,6 +116,16 @@ void node::split(){//doesn't need to pass in parent ptr because parent ptr is at
 		keys.pop_back();
 	}
 	
+	
+	//if current node is root, we make a new node
+	//put the median and the left and right child ptrs into it and we're done
+	if (parent == nullptr) {
+		parent = new node(degree,medianKey);
+		
+	}
+		
+	
+	
 	int idxToInsert = parent->getIndex(medianKey.first);//get index to insert key in parent
 	parent->insertKey(mediankey,idxToInsert);//insert key into parent
 	
@@ -119,17 +136,17 @@ void node::split(){//doesn't need to pass in parent ptr because parent ptr is at
 	parent->insertChild(right,idxToInsert + 1);
 	
 
-			//need to check if we're at root here and do a separate thing for that
 
-	if (parent->getNumKeys() == parent->getDegree())
-		split(*parent);
-		      
-}
+
+	if (parent->getNumKeys() == parent->getDegree()) 
+		parent->split();
+	
+}*/
 
 
 //returns node pointer to traverse down
 template <class T>
-node* node::getNode(const std::pair<int,T> > &pear)
+node<T>* node<T>::getNode(std::pair<int,T> &pear)
 {
 	int idx=getIndex(pear.first);
 	return childs[idx];
@@ -137,7 +154,7 @@ node* node::getNode(const std::pair<int,T> > &pear)
 
 template <class T>
 //return index for insert or exists using binary search
-int node::getIndex(int keyValue)
+int node<T>::getIndex(int keyValue)
 {
 	int lo=0;
 	int hi=keys.size()-1;
@@ -157,7 +174,7 @@ int node::getIndex(int keyValue)
 }
 
 template <class T>
-bool node::keyExists(int keyValue)
+bool node<T>::keyExists(int keyValue)
 
 {
 	int idx=getIndex(keyValue);
@@ -170,7 +187,7 @@ bool node::keyExists(int keyValue)
 }
 
 template <class T>
-bool node::deleteKey(int keyValue)
+bool node<T>::deleteKey(int keyValue)
 {
 	int idx=getIndex(keyValue);
 	//getindex returns keys.size when value greater than all keys
@@ -179,7 +196,7 @@ bool node::deleteKey(int keyValue)
 		return false;
 	}
 	if (keyValue==keys[idx].first) {
-		keys.erase(vector.begin()+idx);
+        keys.erase(keys.begin()+idx);
 		return true;
 	}
 }

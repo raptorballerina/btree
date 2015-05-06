@@ -1,47 +1,78 @@
 #include "btree.h"
 
 template <class T>
-void btree::insert(const std::pair<int,T> &pear)
+void btree<T>::insert(std::pair<int,T> &pear)
 {
-	if (root==nullptr) {
-		node *nd=new node(degree,pear);
-		return;
-	}
-	//
-}
-
-//Need to figure out how to set parent ptr here. And what to do about root?
-template <class T>
-void bTree::insert(const std::pair<int,T> &pear)
-{
-	node* itr = root;
-	while (!itr->isLeaf()){
-		itr = itr->getNode(pear);
-	}
-	int idx = itr->getIndex(pear.first);
-	if (idx == itr->getNumKeys())
-		itr->addKey(pear);
-	else {
-		itr->insertKey(idx,pear);
-	}
-	if (itr->getNumKeys == itr->getDegree)
-		split(itr);
+    if (root==nullptr) {
+        node<T> *nd=new node<T>(degree,pear);
+        root = nd;
+    } else {
+        node<T>* itr = root;
+        while (!itr->isLeaf()){
+            itr = itr->getNode(pear);
+        }
+        int idx = itr->getIndex(pear.first);
+        if (idx == itr->getNumKeys())
+            itr->addKey(pear);
+        else {
+            itr->insertKey(pear,idx);
+        }
+        if (itr->getNumKeys() == degree)
+            split(itr);
+    }
 }
 
 
 template <class T>
-void bTree::split(nd* current){
-	node* left = new node();
-	node* right = new node();
-	int median = keys.size() / 2;
+void btree<T>::split(node<T>* current){//current becomes left node!
+    node<T>* right = new node<T>(degree);//make right node
+	right->parent = current->parent;//set right's parent
+	int median = (current->keys.size() - 1) / 2;
+	std::pair <int,T> medianKey = current->keys[median];
+	int j = median + 1;
+    for (; j< current->keys.size(); j++) {//add right keys and children from current to right node
+		right->addKey(current->keys[j]);
+        right->addChild(current->childs[j]);
+	}
+    right->addChild(current->childs[j]);//add last child
+	
+	int toRemove = current->keys.size() / 2 + 1;//how many keys to remove from current
+	
+	for (int i=0; i < toRemove; i++){//remove keys and children from current
+		current->childs.pop_back();
+		current->keys.pop_back();
+	}
+	
+	if (current == root) {//if we're at the root, we have to make a new node and split into that
+		if (current->parent != nullptr) printf("Root's parent is not nullptr!\n");
+        current->parent = new node<T>(degree,medianKey);//make new root
+		current->parent->addChild(current);//add current child (i.e. left)
+		current->parent->addChild(right);//add right child
+	} else {
+	
+        int idxToInsert = current->parent->getIndex(medianKey.first);//get index to insert key in parent
+		current->parent->insertKey(medianKey,idxToInsert);//insert key into parent
+	
+	//child ptr to the left of the new key is the same as before so we don't need to do anything
+	  //there
+	 
+	 //insert right ptr into correct position in parent (idxToInsert + 1)
+	 current->parent->insertChild(right,idxToInsert + 1);
+	 
+	 if (current->parent->getNumKeys() == degree) {//if the parent is full, we split the parent
+	 	split(current->parent);
+	 	}
+	}
+	
 }
-
+/*
 template <class T>
-bool btree::search(int k)
+bool btree<T>::search(int k)
 {
-	bool boo=false;
+	bool found=false;
 	if (root!=nullptr) {
-		boo=root->search(k);
+		found=root->search(k);
 	}
-	return boo;
+	return found;
 }
+*/
