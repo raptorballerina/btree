@@ -32,7 +32,9 @@ public:
     void addChild(node* child){childs.push_back(child);}
     void setChild(node* child, int index){childs[index] = child;}
 //	bool isRoot(){return root;}
-	
+	std::pair<bool,T> search(int keyValue);
+    void inOrder();
+	//properties:
 	std::vector<std::pair<int,T> > keys;
 	std::vector<node*> childs;
 	int degree; //maximum children, n

@@ -201,8 +201,36 @@ bool node<T>::deleteKey(int keyValue)
 	}
 }
 
+template <class T>
+std::pair<bool,T> node<T>::search(int keyValue)
+{
+	std::pair<bool,T> pear; //standard pair to return
+	int i=0;
+	while (i<keys.size() && keyValue>keys[i]) {
+		i++; //increment iterator until end of keys or search < = actual key value
+	}
+	if (keys[i]==keyValue) { //value found, return true/templated object
+		pear = std::make_pair(true,keys[i].second);
+	}
+	if (leaf) { //if this node is a leaf, could not find value
+		pear = std::make_pair(false,0);
+	}
+	pear = childs[i]->search(keyValue); //go to the next child node
+	return pear;
+}
 
-
+template <class T>
+void node<T>::inOrder() {
+    for (int i=0;i<nd->keys.size();i++) {
+        if (!leaf) {
+            childs[i]->inOrder();
+        }
+        std::cout << keys[i].first << " ";
+    }
+    if (!leaf) {
+        childs[i]->inOrder();
+    }
+}
 
 /*
 template <class T>

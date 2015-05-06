@@ -22,6 +22,23 @@ void btree<T>::insert(std::pair<int,T> &pear)
     }
 }
 
+template <class T>
+std::pair<bool,T> btree<T>::search(int keyValue)
+{
+	if (root!=nullptr) {
+        return root->search(keyValue);
+	} else {
+		return std::make_pair(false,0);
+	}
+}
+
+template <class T>
+void btree<T>::inOrder()
+{
+    if (root!=nullptr) {
+        root->inOrder();
+    }
+}
 
 template <class T>
 void btree<T>::split(node<T>* current){//current becomes left node!

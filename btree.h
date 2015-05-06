@@ -13,7 +13,8 @@ public:
 	int getDegree(){return degree;}
     void split(node<T> *current);
     void insert(std::pair<int,T> &pear);
-//	bool find(std::pair<int,T>
+	std::pair<bool,T> search(int keyValue);
+	void inOrder();
 private:
     node<T> *root;
 	int degree;
@@ -23,6 +24,3 @@ private:
 #include "btree.cpp"
 
 #endif
-
-//Vanessa Vanessa Vanessa!
-//Ryan Ryan Ryan!!
