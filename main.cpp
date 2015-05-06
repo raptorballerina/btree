@@ -17,5 +17,11 @@ int main(int argc, char *argv[])
     imCoveredInBees.insert(hornet);
     imCoveredInBees.inOrder();
 
+    /*std::pair<unsigned int,std::string> sp;
+    sp=imCoveredInBees.search(10);
+    if (sp.first) {
+        std::cout << sp.second << "\n";
+    }*/
+
     return a.exec();
 }

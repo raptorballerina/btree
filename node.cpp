@@ -204,7 +204,7 @@ bool node<T>::deleteKey(unsigned int keyValue)
 template <class T>
 std::pair<bool,T> node<T>::search(unsigned int keyValue)
 {
-	std::pair<bool,T> pear; //standard pair to return
+    std::pair<bool,T> pear; //standard pair to return
     unsigned int i=0;
     while (i<keys.size() && keyValue>keys[i].first) {
 		i++; //increment iterator until end of keys or search < = actual key value
@@ -213,7 +213,8 @@ std::pair<bool,T> node<T>::search(unsigned int keyValue)
 		pear = std::make_pair(true,keys[i].second);
 	}
 	if (leaf) { //if this node is a leaf, could not find value
-		pear = std::make_pair(false,0);
+        std::cout << "here?\n";
+        pear = std::make_pair(false,T());
 	}
 	pear = childs[i]->search(keyValue); //go to the next child node
 	return pear;

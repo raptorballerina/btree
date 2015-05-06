@@ -27,9 +27,9 @@ std::pair<bool,T> btree<T>::search(unsigned int keyValue)
 {
 	if (root!=nullptr) {
         return root->search(keyValue);
-	} else {
-        return std::make_pair(false,"");
-	}
+    } else {
+        return std::make_pair(false,T()); //return false if not found
+    }   //T() is default value for templated type
 }
 
 template <class T>
