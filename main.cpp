@@ -15,7 +15,10 @@ int main(int argc, char *argv[])
     imCoveredInBees.insert(wasp);
     std::pair<unsigned int,std::string> hornet = {10,"ten"};
     imCoveredInBees.insert(hornet);
+    std::pair<unsigned int,std::string> bumblebee = {7,"se7en"};
+    imCoveredInBees.insert(bumblebee);
     imCoveredInBees.inOrder();
+    imCoveredInBees.printRoot();
 
     /*std::pair<unsigned int,std::string> sp;
     sp=imCoveredInBees.search(10);

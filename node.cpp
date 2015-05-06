@@ -156,7 +156,7 @@ template <class T>
 //return index for insert or exists using binary search
 unsigned int node<T>::getIndex(unsigned int keyValue)
 {
-	int lo=0;
+    int lo=0;
 	int hi=keys.size()-1;
     unsigned int idx=0;
 	while (lo<=hi) {
@@ -167,10 +167,15 @@ unsigned int node<T>::getIndex(unsigned int keyValue)
 			lo=idx+1;
 		}
 	}
-	if (idx>=keys.size()) {
+    idx=std::max(hi,lo);
+    if (idx>=keys.size()) {
 		idx=keys.size();
-	}
-	return idx;
+    }
+    for (int i=0; i<keys.size(); i++) {
+        std::cout << keys[i].first << "\n";
+    }
+    std::cout << keyValue << " - " << idx << "\n";
+    return idx;
 }
 
 template <class T>
@@ -227,7 +232,7 @@ void node<T>::inOrder() {
         if (!leaf) {
             childs[i]->inOrder();
         }
-        std::cout << keys[i].first << " ";
+        std::cout << keys[i].second << " ";
     }
     if (!leaf) {
         childs[i]->inOrder();

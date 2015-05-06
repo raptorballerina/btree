@@ -15,6 +15,7 @@ public:
     void insert(std::pair<unsigned int,T> &pear);
     std::pair<bool,T> search(unsigned int keyValue);
 	void inOrder();
+    void printRoot();
 private:
     node<T> *root;
     unsigned int degree;

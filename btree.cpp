@@ -1,6 +1,14 @@
 #include "btree.h"
 
 template <class T>
+void btree<T>::printRoot()
+{
+    for (int i=0; i<root->keys.size();i++) {
+        std::cout << root->keys[i].first << "\n";
+    }
+}
+
+template <class T>
 void btree<T>::insert(std::pair<unsigned int,T> &pear)
 {
     if (root==nullptr) {
@@ -12,6 +20,7 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
             itr = itr->getNode(pear);
         }
         unsigned int idx = itr->getIndex(pear.first);
+        std::cout << pear.first << "," << idx << " \n";
         if (idx == itr->getNumKeys())
             itr->addKey(pear);
         else {
