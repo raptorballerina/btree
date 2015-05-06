@@ -1,7 +1,7 @@
 #include "btree.h"
 
 template <class T>
-void btree<T>::insert(std::pair<int,T> &pear)
+void btree<T>::insert(std::pair<unsigned int,T> &pear)
 {
     if (root==nullptr) {
         node<T> *nd=new node<T>(degree,pear);
@@ -11,7 +11,7 @@ void btree<T>::insert(std::pair<int,T> &pear)
         while (!itr->isLeaf()){
             itr = itr->getNode(pear);
         }
-        int idx = itr->getIndex(pear.first);
+        unsigned int idx = itr->getIndex(pear.first);
         if (idx == itr->getNumKeys())
             itr->addKey(pear);
         else {
@@ -23,12 +23,12 @@ void btree<T>::insert(std::pair<int,T> &pear)
 }
 
 template <class T>
-std::pair<bool,T> btree<T>::search(int keyValue)
+std::pair<bool,T> btree<T>::search(unsigned int keyValue)
 {
 	if (root!=nullptr) {
         return root->search(keyValue);
 	} else {
-		return std::make_pair(false,0);
+        return std::make_pair(false,"");
 	}
 }
 
@@ -46,7 +46,7 @@ void btree<T>::split(node<T>* current){//current becomes left node!
 	right->parent = current->parent;//set right's parent
 	int median = (current->keys.size() - 1) / 2;
 	std::pair <int,T> medianKey = current->keys[median];
-	int j = median + 1;
+    unsigned int j = median + 1;
     for (; j< current->keys.size(); j++) {//add right keys and children from current to right node
 		right->addKey(current->keys[j]);
         right->addChild(current->childs[j]);

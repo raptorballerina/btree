@@ -2,7 +2,7 @@
 bool LADYBUG=true;
 
 template <class T>
-node<T>::node(int dgree)
+node<T>::node(unsigned int dgree)
 {
 	degree=dgree;//max number of children
 	maxKeys=dgree-1;
@@ -14,7 +14,7 @@ node<T>::node(int dgree)
 }
 
 template <class T>
-node<T>::node(int dgree,const std::pair<int,T> &pear)
+node<T>::node(unsigned int dgree,const std::pair<unsigned int,T> &pear)
 {
 	degree=dgree;
 	maxKeys=dgree-1;
@@ -146,7 +146,7 @@ void node::split(){//doesn't need to pass in parent ptr because parent ptr is at
 
 //returns node pointer to traverse down
 template <class T>
-node<T>* node<T>::getNode(std::pair<int,T> &pear)
+node<T>* node<T>::getNode(std::pair<unsigned int,T> &pear)
 {
 	int idx=getIndex(pear.first);
 	return childs[idx];
@@ -154,11 +154,11 @@ node<T>* node<T>::getNode(std::pair<int,T> &pear)
 
 template <class T>
 //return index for insert or exists using binary search
-int node<T>::getIndex(int keyValue)
+unsigned int node<T>::getIndex(unsigned int keyValue)
 {
 	int lo=0;
 	int hi=keys.size()-1;
-	int idx;
+    unsigned int idx=0;
 	while (lo<=hi) {
 		idx=lo+(hi-lo)/2;
 		if (keyValue<=keys[idx].first) {
@@ -174,7 +174,7 @@ int node<T>::getIndex(int keyValue)
 }
 
 template <class T>
-bool node<T>::keyExists(int keyValue)
+bool node<T>::keyExists(unsigned int keyValue)
 
 {
 	int idx=getIndex(keyValue);
@@ -187,7 +187,7 @@ bool node<T>::keyExists(int keyValue)
 }
 
 template <class T>
-bool node<T>::deleteKey(int keyValue)
+bool node<T>::deleteKey(unsigned int keyValue)
 {
 	int idx=getIndex(keyValue);
 	//getindex returns keys.size when value greater than all keys
@@ -202,14 +202,14 @@ bool node<T>::deleteKey(int keyValue)
 }
 
 template <class T>
-std::pair<bool,T> node<T>::search(int keyValue)
+std::pair<bool,T> node<T>::search(unsigned int keyValue)
 {
 	std::pair<bool,T> pear; //standard pair to return
-	int i=0;
-	while (i<keys.size() && keyValue>keys[i]) {
+    unsigned int i=0;
+    while (i<keys.size() && keyValue>keys[i].first) {
 		i++; //increment iterator until end of keys or search < = actual key value
 	}
-	if (keys[i]==keyValue) { //value found, return true/templated object
+    if (keys[i].first==keyValue) { //value found, return true/templated object
 		pear = std::make_pair(true,keys[i].second);
 	}
 	if (leaf) { //if this node is a leaf, could not find value
@@ -221,7 +221,7 @@ std::pair<bool,T> node<T>::search(int keyValue)
 
 template <class T>
 void node<T>::inOrder() {
-    int i=0;
+    unsigned int i=0;
     for (;i<keys.size();i++) {
         if (!leaf) {
             childs[i]->inOrder();

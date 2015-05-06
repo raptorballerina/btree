@@ -10,35 +10,35 @@ class node
 public:
 	/*node of degree n can have up to n children and n-1 keys
 	reserve space for n keys so that vector will not resize on loose insertion*/
-	node(int dgree);
-    node(int dgree,const std::pair<int,T> &pear);
+    node(unsigned int dgree);
+    node(unsigned int dgree,const std::pair<unsigned int,T> &pear);
 	//properties
 	node* parent;
 	//getters:
-	int getDegree(){return degree;}
-	int getMaxKeys(){return maxKeys;}
-	int getNumKeys(){return keys.size();}
+    unsigned int getDegree(){return degree;}
+    unsigned int getMaxKeys(){return maxKeys;}
+    unsigned int getNumKeys(){return keys.size();}
 	bool isLeaf(){return leaf;}
 	//functions:
-	void insert(node *nd,const std::pair<int,T> &pear);
-    node* getNode(std::pair<int,T>  &pear);
-	int getIndex(int keyValue);
-	bool keyExists(int keyValue);
-	bool deleteKey(int keyValue);
-	bool removeChild(int childIndex);
-    void addKey(std::pair<int,T> pear){keys.push_back(pear);}
-	void insertKey(std::pair<int,T>pear,int i){keys.insert(keys.begin()+i,pear);}
-	void insertChild(node* child, int i){childs.insert(childs.begin()+1, child);}
+    void insert(node *nd,const std::pair<unsigned int,T> &pear);
+    node* getNode(std::pair<unsigned int,T>  &pear);
+    unsigned int getIndex(unsigned int keyValue);
+    bool keyExists(unsigned int keyValue);
+    bool deleteKey(unsigned int keyValue);
+    bool removeChild(unsigned int childIndex);
+    void addKey(std::pair<unsigned int,T> pear){keys.push_back(pear);}
+    void insertKey(std::pair<unsigned int,T>pear,unsigned int i){keys.insert(keys.begin()+i,pear);}
+    void insertChild(node* child, unsigned int i){childs.insert(childs.begin()+i, child);}
     void addChild(node* child){childs.push_back(child);}
-    void setChild(node* child, int index){childs[index] = child;}
+    void setChild(node* child, unsigned int index){childs[index] = child;}
 //	bool isRoot(){return root;}
-	std::pair<bool,T> search(int keyValue);
+    std::pair<bool,T> search(unsigned int keyValue);
     void inOrder();
 	//properties:
-	std::vector<std::pair<int,T> > keys;
+    std::vector<std::pair<unsigned int,T> > keys;
 	std::vector<node*> childs;
-	int degree; //maximum children, n
-	int maxKeys; //maximum keys, n-1
+    unsigned int degree; //maximum children, n
+    unsigned int maxKeys; //maximum keys, n-1
 	bool leaf; //childless returns true
 	//overloads:
 	//T operator[](int index);

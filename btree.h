@@ -9,15 +9,15 @@ template <class T>
 class btree
 {
 public:
-	btree(int dgree,bool preEmptiveSplit=false):root(nullptr),degree(dgree),preSplit(preEmptiveSplit){}
-	int getDegree(){return degree;}
+    btree(unsigned int dgree,bool preEmptiveSplit=false):root(nullptr),degree(dgree),preSplit(preEmptiveSplit){}
+    unsigned int getDegree(){return degree;}
     void split(node<T> *current);
-    void insert(std::pair<int,T> &pear);
-	std::pair<bool,T> search(int keyValue);
+    void insert(std::pair<unsigned int,T> &pear);
+    std::pair<bool,T> search(unsigned int keyValue);
 	void inOrder();
 private:
     node<T> *root;
-	int degree;
+    unsigned int degree;
 	bool preSplit;
 };
 
