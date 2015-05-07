@@ -77,7 +77,7 @@ void btree<T>::split(node<T>* current){//current becomes left node!
 	}
     right->addChild(current->childs[j]);//add last child
 
-    int toRemove = ((current->keys.size()-1) / 2) + 1;//how many keys to remove from current
+    int toRemove = current->keys.size() / 2 + 1;//how many keys to remove from current
 	
 	for (int i=0; i < toRemove; i++){//remove keys and children from current
 		current->childs.pop_back();
