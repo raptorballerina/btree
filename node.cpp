@@ -9,8 +9,9 @@ node<T>::node(unsigned int dgree)
 	parent=nullptr;
 	leaf=true;
 	keys.reserve(dgree);
-	childs.reserve(dgree);
-    //std::fill(childs.begin(),childs.end(),nullptr);
+    childs.reserve(dgree);
+    std::fill(childs.begin(),childs.end(),nullptr);
+    std::cout << "new node created\n";
 }
 
 template <class T>
@@ -21,9 +22,10 @@ node<T>::node(unsigned int dgree,const std::pair<unsigned int,T> &pear)
 	parent=nullptr;
 	leaf=true;
 	keys.reserve(dgree);
-	childs.reserve(dgree);
-    //std::fill(childs.begin(),childs.end(),nullptr);
+    childs.reserve(dgree);
+    std::fill(childs.begin(),childs.end(),nullptr);
     keys.push_back(pear);
+    std::cout << "new node created\n";
 }
 /* //LETTING THE TREE HANDLE THE INSERT
 template <class T>
@@ -168,7 +170,7 @@ unsigned int node<T>::getIndex(unsigned int keyValue)
 		}
 	}
 	if (LADYBUG) {
-		std::cout << "Insert value " << keyValue << " at index " << lo << "\n";
+        std::cout << "insert value " << keyValue << " at index " << lo << "\n";
 	}
 	return lo;
 }

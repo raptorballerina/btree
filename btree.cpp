@@ -7,19 +7,18 @@ void btree<T>::printLevel(int level)
     if (root!=nullptr) {
         node<T> *nd=root;
         unsigned int lev=(unsigned int)level;
-        std::cout << "hola!\n";
         for (unsigned int i=0; i<lev; i++) {
             if (nd->childs.size()>0) {
-                std::cout << "oiver here\n";
+                std::cout << nd->childs.size() << "\n";
                 nd=nd->childs[0];
             } else {
                 return;
             }
         }
         std::cout << "Level " << level << ": ";
-        for (unsigned int i=0; i<nd->keys.size(); i++) {
+        /*for (unsigned int i=0; i<nd->keys.size(); i++) {
             std::cout << nd->keys[i].second << " ";
-        }
+        }*/
         std::cout << "\n";
     }
 }
@@ -77,13 +76,13 @@ void btree<T>::split(node<T>* current){//current becomes left node!
         right->addChild(current->childs[j]);
 	}
     right->addChild(current->childs[j]);//add last child
-	
-	int toRemove = current->keys.size() / 2 + 1;//how many keys to remove from current
+
+    int toRemove = ((current->keys.size()-1) / 2) + 1;//how many keys to remove from current
 	
 	for (int i=0; i < toRemove; i++){//remove keys and children from current
 		current->childs.pop_back();
 		current->keys.pop_back();
-	}
+    }
 	
 	if (current == root) {//if we're at the root, we have to make a new node and split into that
 		if (current->parent != nullptr) printf("Root's parent is not nullptr!\n");
