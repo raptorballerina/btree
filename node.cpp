@@ -167,6 +167,9 @@ unsigned int node<T>::getIndex(unsigned int keyValue)
 			lo=idx+1;
 		}
 	}
+	if (LADYBUG) {
+		std::cout << "Insert value " << keyValue << " at index " << lo << "\n";
+	}
 	return lo;
 }
 
@@ -189,7 +192,9 @@ bool node<T>::deleteKey(unsigned int keyValue)
 	int idx=getIndex(keyValue);
 	//getindex returns keys.size when value greater than all keys
 	if (idx==keys.size()) {
-		if (LADYBUG) std::cout << "Key " << keyValue << " does not exist & therefore was not deleted!\n";
+		if (LADYBUG) {
+			std::cout << "Key " << keyValue << " does not exist, delete canceled\n";
+		}
 		return false;
 	}
 	if (keyValue==keys[idx].first) {
@@ -210,7 +215,6 @@ std::pair<bool,T> node<T>::search(unsigned int keyValue)
 		pear = std::make_pair(true,keys[i].second);
 	}
 	if (leaf) { //if this node is a leaf, could not find value
-        std::cout << "here?\n";
         pear = std::make_pair(false,T());
 	}
 	pear = childs[i]->search(keyValue); //go to the next child node
