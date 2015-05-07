@@ -159,27 +159,15 @@ unsigned int node<T>::getIndex(unsigned int keyValue)
     int lo=0;
 	int hi=keys.size()-1;
     unsigned int idx=0;
-    unsigned int retIdx=0;
     while (lo<=hi) {
-		idx=lo+(hi-lo)/2;
+		idx=(lo+hi)/2;
 		if (keyValue<=keys[idx].first) {
 			hi=idx-1;
-            retIdx = hi;
 		} else { //keyValue>keys[idx].first
 			lo=idx+1;
-            retIdx = lo;
 		}
 	}
-
-    //idx=std::max(hi,lo);
-
-    if (idx>=keys.size()) {
-		idx=keys.size();
-    }
-    for (int i=0; i<keys.size(); i++) {
-        std::cout << keys[i].first << "\n";
-    }
-    return retIdx;
+	return lo;
 }
 
 template <class T>
