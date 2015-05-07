@@ -17,11 +17,11 @@ int main(int argc, char *argv[])
     imCoveredInBees.insert(hornet);
     std::pair<unsigned int,std::string> bumblebee = {7,"se7en"};
     imCoveredInBees.insert(bumblebee);
-    /*std::pair<unsigned int,std::string> honeybee = {3,"three"};
+    std::pair<unsigned int,std::string> honeybee = {3,"three"};
     imCoveredInBees.insert(honeybee);
-    */imCoveredInBees.inOrder();
+    imCoveredInBees.inOrder();
     imCoveredInBees.printLevel(0);
-    //imCoveredInBees.printLevel(1);
+    imCoveredInBees.printLevel(1);
 
     /*std::pair<unsigned int,std::string> sp;
     sp=imCoveredInBees.search(10);

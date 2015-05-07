@@ -7,19 +7,21 @@ void btree<T>::printLevel(int level)
     if (root!=nullptr) {
         node<T> *nd=root;
         unsigned int lev=(unsigned int)level;
+        std::cout << "this is an attempt to print level " << level << "\n";
         for (unsigned int i=0; i<lev; i++) {
             if (nd->childs.size()>0) {
-                std::cout << nd->childs.size() << "\n";
+                std::cout << "At level " << i << ": " << nd->keys.size() << " keys\n";
+                std::cout << "At level " << i << ": " << nd->childs.size() << " childs\n";
                 nd=nd->childs[0];
             } else {
                 return;
             }
         }
-        std::cout << "Level " << level << ": ";
+        //std::cout << "Level " << level << ": ";
         /*for (unsigned int i=0; i<nd->keys.size(); i++) {
             std::cout << nd->keys[i].second << " ";
         }*/
-        std::cout << "\n";
+        //std::cout << "\n";
     }
 }
 
