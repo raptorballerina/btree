@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
     imCoveredInBees.insert(bumblebee);
     std::pair<unsigned int,std::string> honeybee = {3,"three"};
     imCoveredInBees.insert(honeybee);
+    std::cout << "in order print: ";
     imCoveredInBees.inOrder();
     imCoveredInBees.printLevel(0);
     imCoveredInBees.printLevel(1);

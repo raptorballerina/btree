@@ -26,10 +26,10 @@ public:
     bool keyExists(unsigned int keyValue);
     bool deleteKey(unsigned int keyValue);
     bool removeChild(unsigned int childIndex);
-    void addKey(std::pair<unsigned int,T> &pear){keys.push_back(pear);}
+    void addKey(std::pair<unsigned int,T> &pear);
+    void addChild(node* child);
     void insertKey(std::pair<unsigned int,T>pear,unsigned int i){keys.insert(keys.begin()+i,pear);}
     void insertChild(node* child, unsigned int i){childs.insert(childs.begin()+i, child);}
-    void addChild(node* child){childs.push_back(child);}
     void setChild(node* child, unsigned int index){childs[index] = child;}
 //	bool isRoot(){return root;}
     std::pair<bool,T> search(unsigned int keyValue);

@@ -10,7 +10,6 @@ node<T>::node(unsigned int dgree)
 	leaf=true;
 	keys.reserve(dgree);
     childs.reserve(dgree);
-    std::fill(childs.begin(),childs.end(),nullptr);
     std::cout << "new node created\n";
 }
 
@@ -23,10 +22,22 @@ node<T>::node(unsigned int dgree,const std::pair<unsigned int,T> &pear)
 	leaf=true;
 	keys.reserve(dgree);
     childs.reserve(dgree);
-    std::fill(childs.begin(),childs.end(),nullptr);
     keys.push_back(pear);
+    childs.push_back(nullptr); //do this twice because you will have one key here
+    childs.push_back(nullptr); //need 2 child pointers
     std::cout << "new node created\n";
 }
+
+template <class T>
+void node<T>::addKey(std::pair<unsigned int,T> &pear) {
+    keys.push_back(pear); //add pair to key vector
+}
+
+template <class T>
+void node<T>::addChild(node* child) {
+    childs.push_back(child);
+}
+
 /* //LETTING THE TREE HANDLE THE INSERT
 template <class T>
 void node::insert(node* nd,const std::pair<int,T> &pear) //INCOMPLETE
@@ -170,7 +181,7 @@ unsigned int node<T>::getIndex(unsigned int keyValue)
 		}
 	}
 	if (LADYBUG) {
-        std::cout << "insert value " << keyValue << " at index " << lo << "\n";
+        std::cout << "in get index, value " << keyValue << " at index " << lo << "\n";
 	}
 	return lo;
 }
