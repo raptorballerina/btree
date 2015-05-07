@@ -104,6 +104,7 @@ std::cout << "in split before anything happens, current has " << current->childs
     //int toRemove = current->keys.size() / 2 + 1;//how many keys to remove from current
     unsigned int k = median + 1;
     for (; k < current->keys.size(); k++) {
+        std::cout << "popped index " << k << ": " << current->keys[k].second << "\n";
         current->keys.pop_back();
         current->childs.pop_back();
     } //do not need to remove last child here
@@ -127,9 +128,9 @@ std::cout << "in split, current has " << current->childs.size() << " childs\n";
         //current->parent->addChild(current);//add current child (i.e. left)
         //current->parent->addChild(right);//add right child
         node<T> *nr=new node<T>(degree,medianKey);
-        current->childs[0]=current; //constructor given standard pair creates nullptrs in index 0 & 1
-        current->childs[1]=right;
-        //root=nr;
+        root=nr;
+        nr->childs[0]=current; //constructor given standard pair creates nullptrs in index 0 & 1
+        nr->childs[1]=right;
     } else {
         int idxToInsert = current->parent->getIndex(medianKey.first);//get index to insert key in parent
 		current->parent->insertKey(medianKey,idxToInsert);//insert key into parent
