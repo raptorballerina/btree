@@ -36,7 +36,7 @@ public:
     void inOrder();
 	//properties:
     std::vector<std::pair<unsigned int,T> > keys;
-	std::vector<node*> childs;
+    std::vector<node<T>*> childs;
     unsigned int degree; //maximum children, n
     unsigned int maxKeys; //maximum keys, n-1
 	bool leaf; //childless returns true

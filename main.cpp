@@ -11,14 +11,17 @@ int main(int argc, char *argv[])
     
 
     btree<std::string> imCoveredInBees(4,false);
-    std::pair<unsigned int,std::string> wasp = {5,"five!"};
+    std::pair<unsigned int,std::string> wasp = {5,"five"};
     imCoveredInBees.insert(wasp);
     std::pair<unsigned int,std::string> hornet = {10,"ten"};
     imCoveredInBees.insert(hornet);
     std::pair<unsigned int,std::string> bumblebee = {7,"se7en"};
     imCoveredInBees.insert(bumblebee);
+    std::pair<unsigned int,std::string> honeybee = {3,"three"};
+    imCoveredInBees.insert(honeybee);
     imCoveredInBees.inOrder();
-    imCoveredInBees.printRoot();
+    imCoveredInBees.printLevel(0);
+    //imCoveredInBees.printLevel(1);
 
     /*std::pair<unsigned int,std::string> sp;
     sp=imCoveredInBees.search(10);

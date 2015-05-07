@@ -14,8 +14,8 @@ public:
     void split(node<T> *current);
     void insert(std::pair<unsigned int,T> &pear);
     std::pair<bool,T> search(unsigned int keyValue);
-	void inOrder();
-    void printRoot();
+    void inOrder();
+    void printLevel(int level);
 private:
     node<T> *root;
     unsigned int degree;

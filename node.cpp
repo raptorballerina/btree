@@ -10,7 +10,7 @@ node<T>::node(unsigned int dgree)
 	leaf=true;
 	keys.reserve(dgree);
 	childs.reserve(dgree);
-	std::fill(childs.begin(),childs.end(),nullptr);
+    //std::fill(childs.begin(),childs.end(),nullptr);
 }
 
 template <class T>
@@ -22,7 +22,7 @@ node<T>::node(unsigned int dgree,const std::pair<unsigned int,T> &pear)
 	leaf=true;
 	keys.reserve(dgree);
 	childs.reserve(dgree);
-	std::fill(childs.begin(),childs.end(),nullptr);
+    //std::fill(childs.begin(),childs.end(),nullptr);
     keys.push_back(pear);
 }
 /* //LETTING THE TREE HANDLE THE INSERT
