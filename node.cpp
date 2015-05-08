@@ -219,18 +219,33 @@ bool node<T>::keyExists(unsigned int keyValue)
 }
 
 template <class T>
-T node<T>::getKeyData(unsigned int keyValue)
+T node<T>::getDataByKey(unsigned int keyValue)
 {
-    unsigned int idx=getIndex(keyValue);
-    if (idx>=keys.size()) {
-        std::cout << "in getkeydata, nothing found for keyvalue " << keyValue << "\n";
-    }
-    if (keyValue!=keys[idx].first) {
-        std::cout << "in getkeydata, nothing found for keyvalue " << keyValue << "\n";
-    } else { //keyValue==keys[idx].first)
-       return keys[idx].second;
+    unsigned int index=getIndex(keyValue);
+    if (index>=keys.size()) { //check the size first so that it won't seg fault
+        if (LADYBUG) {
+            std::cout << "in getkeydata, nothing found for keyvalue " << keyValue << "\n";
+        }
+    } else if (keyValue!=keys[index].first) {
+        if (LADYBUG) {
+            std::cout << "in getkeydata, nothing found for keyvalue " << keyValue << "\n";
+        }
+    } else { //keyValue==keys[index].first)
+       return keys[index].second;
     }
     return T(); //defaults to return as if nothing was found
+}
+
+template <class T>
+T node<T>::getDataByIndex(unsigned int index)
+{
+    if (index>=keys.size()) { //check the size first so that it won't seg fault
+        if (LADYBUG) {
+            std::cout << "in getkeydata, index " << index << " is out of bounds\n";
+        }
+        index=keys.size()-1; //return last index position
+    }
+    return keys[index].second;
 }
 
 template <class T>
@@ -248,34 +263,20 @@ bool node<T>::deleteKey(unsigned int keyValue)
         keys.erase(keys.begin()+idx);
 		return true;
 	}*/
+    return false;
 }
 
 template <class T>
-std::pair<bool, T> node<T>::search(unsigned int keyValue)
+int node<T>::search(unsigned int keyValue)
 {
-    /*std::pair<bool,T> pear; //return object
-    unsigned int idx=getIndex(keyValue);
-    if (keys[i].first==keyValue) {
-        return std::make_pair(true, keys[i].second);
-    } else {
-        return childs[i]->
-    if (idx==keys.size()) {
-        //go down tail pointer
-        //return std::make_pair(false, T());
-    }*/
-
-    /*unsigned int i=0;
-    while (i<keys.size() && keyValue>keys[i].first) {
-        i++; //increment iterator until end of keys or search < = actual key value
+    int index = (int)getIndex(keyValue);
+    if (index > keys.size()) {
+        index = keys.size()-1;
     }
-    if (keys[i].first==keyValue) { //value found, return true/templated object
-        pear = std::make_pair(true,keys[i].second);
+    if (keyValue==keys[index].first) {
+        return index;
     }
-    if (leaf) { //if this node is a leaf, could not find value
-        pear = std::make_pair(false,T());
-    }
-    pear = childs[i]->search(keyValue); //go to the next child node
-    return pear;*/
+    return -1; //default to nothing found
 }
 
 //decides where in node key value should go and adds child pointer accordingly, for non empty nodes
@@ -290,7 +291,9 @@ void node<T>::insert(unsigned int keyValue, node<T> *childPtr)
     childs.insert(childs.begin()+idx, childPtr);
     if (keys.size()==1) { //if node was empty to begin with, warn user
         childs.push_back(nullptr); //set right child ptr to null
-        if (LADYBUG) { std::cout << "not a good idea to insert in empty node, set right child ptr\n"; }
+        if (LADYBUG) {
+            std::cout << "not a good idea to insert in empty node, set right child ptr\n";
+        }
     }
 }
 
@@ -316,6 +319,29 @@ void node<T>::inOrder() {
     if (!leaf) {
         childs[i]->inOrder();
     }
+}
+
+//print data values in a node
+template <class U>
+std::ostream& operator<< (std::ostream &out, node<U> &nd)
+{
+    for (unsigned int i=0; i<nd.keys.size(); i++) {
+        std::cout << nd.keys[i] << " ";
+    }
+    return out;
+}
+
+//returns key when given an index
+template <class T>
+T node<T>::operator[] (unsigned int index)
+{
+    if (index>=keys.size()) {
+        if (LADYBUG) {
+            std::cout << "in [] operator, index " << index << " is out of bounds\n";
+        }
+        index = keys.size()-1;
+    }
+    return keys[index].first;
 }
 
 /*

@@ -116,11 +116,60 @@ template <class T>
 std::pair<bool,T> btree<T>::search(unsigned int keyValue)
 {
 	if (root!=nullptr) {
-        return root->search(keyValue);
+        return search(root, keyValue);
     } else {
-        return std::make_pair(false,T()); //return false if not found
-    }   //T() is default value for templated type
+        return std::make_pair(false,T()); //return false & default T if not found
+    }
 }
+
+template <class T>
+std::pair<bool, T> btree<T>::search(node<T>* nd, unsigned int keyValue)
+{
+    if (nd==nullptr) {
+        return std::make_pair<bool,T>(false, T());
+    }
+    int searchIndex = nd->search(keyValue); //searches current node, return index if found
+    if (searchIndex==-1) { //returns -1 if key not found
+        node<T> *nn = nd->getNode(keyValue); //gets appropriate node based on key value
+        if (nn!=nullptr)
+        return search(nn, keyValue); //traverse down that node
+    }
+    if (searchIndex>=0) { //-1 means item wasn't found
+        T returnData=nd->getDataByIndex(searchIndex);
+        std::pair<bool, T> pear;
+        pear.first = true;
+        pear.second = returnData;
+        return pear;
+        //return std::make_pair<bool,T>(true, returnData);
+    }
+}
+
+/*
+std::pair<bool,T> pear; //return object
+unsigned int idx=getIndex(keyValue);
+    if (keys[i].first==keyValue) {
+        return std::make_pair(true, keys[i].second);
+    } else {
+        return childs[i]->
+    if (idx==keys.size()) {
+        //go down tail pointer
+        //return std::make_pair(false, T());
+    }*/
+
+    /*unsigned int i=0;
+    while (i<keys.size() && keyValue>keys[i].first) {
+        i++; //increment iterator until end of keys or search < = actual key value
+    }
+    if (keys[i].first==keyValue) { //value found, return true/templated object
+        pear = std::make_pair(true,keys[i].second);
+    }
+    if (leaf) { //if this node is a leaf, could not find value
+        pear = std::make_pair(false,T());
+    }
+    pear = childs[i]->search(keyValue); //go to the next child node
+    return pear;
+}
+*/
 
 template <class T>
 void btree<T>::inOrder()
