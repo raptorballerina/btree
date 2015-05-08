@@ -1,6 +1,6 @@
 #include "node.h"
 
-bool LADYBUG=true; //set to true for debug statements
+bool LADYBUG=false; //set to true for debug statements
 
 template <class T>
 node<T>::node(unsigned int dgree)
@@ -223,10 +223,10 @@ T node<T>::getKeyData(unsigned int keyValue)
 {
     unsigned int idx=getIndex(keyValue);
     if (idx>=keys.size()) {
-        std::cout << "in getkeydata, nothing found for keyvalue " << keyValue << "\n";
+        if (LADYBUG) std::cout << "in getkeydata, nothing found for keyvalue " << keyValue << "\n";
     }
     if (keyValue!=keys[idx].first) {
-        std::cout << "in getkeydata, nothing found for keyvalue " << keyValue << "\n";
+        if (LADYBUG) std::cout << "in getkeydata, nothing found for keyvalue " << keyValue << "\n";
     } else { //keyValue==keys[idx].first)
        return keys[idx].second;
     }
