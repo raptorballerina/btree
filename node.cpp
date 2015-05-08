@@ -1,6 +1,6 @@
 #include "node.h"
 
-bool LADYBUG=true; //set to true for debug statements
+bool LADYBUG=false; //set to true for debug statements
 
 template <class T>
 node<T>::node(unsigned int dgree)
@@ -221,6 +221,7 @@ bool node<T>::keyExists(unsigned int keyValue)
 template <class T>
 T node<T>::getDataByKey(unsigned int keyValue)
 {
+<<<<<<< HEAD
     unsigned int index=getIndex(keyValue);
     if (index>=keys.size()) { //check the size first so that it won't seg fault
         if (LADYBUG) {
@@ -232,6 +233,16 @@ T node<T>::getDataByKey(unsigned int keyValue)
         }
     } else { //keyValue==keys[index].first)
        return keys[index].second;
+=======
+    unsigned int idx=getIndex(keyValue);
+    if (idx>=keys.size()) {
+        if (LADYBUG) std::cout << "in getkeydata, nothing found for keyvalue " << keyValue << "\n";
+    }
+    if (keyValue!=keys[idx].first) {
+        if (LADYBUG) std::cout << "in getkeydata, nothing found for keyvalue " << keyValue << "\n";
+    } else { //keyValue==keys[idx].first)
+       return keys[idx].second;
+>>>>>>> ef27ad7abc2fa4376aafe11abb72db5d44dd4552
     }
     return T(); //defaults to return as if nothing was found
 }
@@ -279,6 +290,8 @@ int node<T>::search(unsigned int keyValue)
     return -1; //default to nothing found
 }
 
+
+
 //decides where in node key value should go and adds child pointer accordingly, for non empty nodes
 template <class T>
 void node<T>::insert(unsigned int keyValue, node<T> *childPtr)
@@ -312,7 +325,10 @@ void node<T>::inOrder() {
     unsigned int i=0;
     for (;i<keys.size();i++) {
         if (!leaf) {
+            if (LADYBUG) std::cout << "going down at " << keys[i].second << std::endl;
             childs[i]->inOrder();
+        } else {
+            if (LADYBUG) std::cout << "leaf at " << keys[i].second << std::endl;
         }
         std::cout << keys[i].second << " ";
     }

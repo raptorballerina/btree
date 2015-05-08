@@ -1,6 +1,7 @@
 #include "btree.h"
 
 
+
 template <class T>
 void btree<T>::breadthFirst() //similar to breadth first
 {
@@ -28,7 +29,7 @@ void btree<T>::breadthFirst() //similar to breadth first
     }
     std::cout << "\n";
 }
-/*
+/*git.coml
 template <class T>
 void btree<T>::printLevel(int level)
 {
@@ -86,8 +87,8 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
     if (root==nullptr) {
         node<T> *nd=new node<T>(degree,pear);
         root = nd;
-        std::cout << "in insert, we are creating a root\n";
-        std::cout << "  root node: " << nd->keys.size() << " keys, " << nd->childs.size() << " childs\n";
+        if (LADYBUG) std::cout << "in insert, we are creating a root\n";
+        if (LADYBUG) std::cout << "  root node: " << nd->keys.size() << " keys, " << nd->childs.size() << " childs\n";
     } else {
         node<T>* itr = root;
         unsigned int iDebug=0;
@@ -95,18 +96,18 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
             itr = itr->getNode(pear);
             iDebug++;
         }
-        unsigned int idx = itr->getIndex(pear.first);
-        if (idx == itr->getNumKeys()) {
+        unsigned int idx = itr->getIndex(pear.first);//index in which to insert key
+        if (idx == itr->getNumKeys()) {//if idx > rest of node, just push it to the back of the vector
             itr->addKey(pear);
             itr->addChild(nullptr);
         } else {
-            itr->insertKey(pear,idx);
+            itr->insertKey(pear,idx);//insert key in the correct position
             itr->addChild(nullptr);
         }
-        if (itr->getNumKeys() == degree) {
+        if (itr->getNumKeys() == degree) {//if too many keys in node, split
             //std::cout << "\n";
-            std::cout << "in insert, we are not creating a root\n";
-            std::cout << "  in node " << iDebug << ": " << itr->keys.size() << " keys, " << itr->childs.size() << " childs\n";
+         if (LADYBUG)   std::cout << "in insert, we are not creating a root\n";
+         if (LADYBUG)   std::cout << "  in node " << iDebug << ": " << itr->keys.size() << " keys, " << itr->childs.size() << " childs\n";
             split(itr);
         }
     }
@@ -183,7 +184,7 @@ void btree<T>::inOrder()
 template <class T>
 void btree<T>::split(node<T>* current){//current becomes left node!
 
-    std::cout << "in split (begin), current has " << current->keys.size() << " keys, " << current->childs.size() << " childs\n";
+    if (LADYBUG) std::cout << "in split (begin), current has " << current->keys.size() << " keys, " << current->childs.size() << " childs\n";
 
     node<T>* right = new node<T>(degree);//make right node
 	right->parent = current->parent;//set right's parent
@@ -199,11 +200,11 @@ void btree<T>::split(node<T>* current){//current becomes left node!
     //int toRemove = current->keys.size() / 2 + 1;//how many keys to remove from current
     unsigned int k = median-1;
     for (; k <= current->keys.size(); k++) {
-        std::cout << "popped index " << k << ": " << current->keys[k].second << "\n";
+        if (LADYBUG) std::cout << "popped index " << k << ": " << current->keys[k].second << "\n";
         current->keys.pop_back();
         current->childs.pop_back();
     } //do not need to remove last child here
-std::cout << "in split, current has " << current->keys.size() << " keys, " << current->childs.size() << " childs\n";
+if (LADYBUG) std::cout << "in split, current has " << current->keys.size() << " keys, " << current->childs.size() << " childs\n";
 
     /*for (int i=0; i < toRemove; i++){//remove keys and children from current
         current->keys.pop_back();
@@ -225,22 +226,24 @@ std::cout << "in split, current has " << current->keys.size() << " keys, " << cu
         root=nr;
         root->childs[0]=current; //constructor given standard pair creates nullptrs in index 0 & 1
         root->childs[1]=right;
+        root->setLeaf(false);
 
         node<T>* lft=root->childs[0];
-        std::cout << "   left now has: ";
+        if (LADYBUG) std::cout << "   left now has: ";
         for (unsigned int m=0; m<lft->keys.size(); m++) {
             std::cout << lft->keys[m].second << " ";
         }
-        std::cout << "\n";
+        if (LADYBUG) std::cout << "\n";
         node<T>* rght=root->childs[1];
-        std::cout << "   right now has: ";
+        if (LADYBUG) std::cout << "   right now has: ";
         for (unsigned int m=0; m<rght->keys.size(); m++) {
-            std::cout << rght->keys[m].second << " ";
+           if (LADYBUG) std::cout << rght->keys[m].second << " ";
         }
-        std::cout << "\n";
+        if (LADYBUG) std::cout << "\n";
 
 
     } else {
+        current->parent->setLeaf(false);
         int idxToInsert = current->parent->getIndex(medianKey.first);//get index to insert key in parent
 		current->parent->insertKey(medianKey,idxToInsert);//insert key into parent
 	

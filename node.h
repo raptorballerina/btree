@@ -40,6 +40,10 @@ public:
     void insertKey(std::pair<unsigned int,T>pear,unsigned int i){keys.insert(keys.begin()+i,pear);}
     void insertChild(node* child, unsigned int i);
     void setChild(node* child, unsigned int index){childs[index] = child;}
+<<<<<<< HEAD
+=======
+    void setLeaf(bool val){leaf=val;}
+>>>>>>> ef27ad7abc2fa4376aafe11abb72db5d44dd4552
     void insert(unsigned int keyValue, node<T> *childPtr=nullptr);
     int search(unsigned int keyValue);
 //	bool isRoot(){return root;}
