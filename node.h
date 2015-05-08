@@ -38,7 +38,7 @@ public:
     void insertKey(std::pair<unsigned int,T>pear,unsigned int i){keys.insert(keys.begin()+i,pear);}
     void insertChild(node* child, unsigned int i);
     void setChild(node* child, unsigned int index){childs[index] = child;}
-
+    void setLeaf(bool val){leaf=val;}
     void insert(unsigned int keyValue, node<T> *childPtr=nullptr);
 
 //	bool isRoot(){return root;}

@@ -278,6 +278,8 @@ std::pair<bool, T> node<T>::search(unsigned int keyValue)
     return pear;*/
 }
 
+
+
 //decides where in node key value should go and adds child pointer accordingly, for non empty nodes
 template <class T>
 void node<T>::insert(unsigned int keyValue, node<T> *childPtr)
@@ -309,7 +311,10 @@ void node<T>::inOrder() {
     unsigned int i=0;
     for (;i<keys.size();i++) {
         if (!leaf) {
+            if (LADYBUG)    std::cout << "going down at " << keys[i].second << std::endl;
             childs[i]->inOrder();
+        } else {
+            if (LADYBUG) std::cout << "leaf at " << keys[i].second << std::endl;
         }
         std::cout << keys[i].second << " ";
     }

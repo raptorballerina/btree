@@ -29,7 +29,7 @@ void btree<T>::breadthFirst() //similar to breadth first
     }
     std::cout << "\n";
 }
-/*
+/*git.coml
 template <class T>
 void btree<T>::printLevel(int level)
 {
@@ -96,15 +96,15 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
             itr = itr->getNode(pear);
             iDebug++;
         }
-        unsigned int idx = itr->getIndex(pear.first);
-        if (idx == itr->getNumKeys()) {
+        unsigned int idx = itr->getIndex(pear.first);//index in which to insert key
+        if (idx == itr->getNumKeys()) {//if idx > rest of node, just push it to the back of the vector
             itr->addKey(pear);
             itr->addChild(nullptr);
         } else {
-            itr->insertKey(pear,idx);
+            itr->insertKey(pear,idx);//insert key in the correct position
             itr->addChild(nullptr);
         }
-        if (itr->getNumKeys() == degree) {
+        if (itr->getNumKeys() == degree) {//if too many keys in node, split
             //std::cout << "\n";
          if (LADYBUG)   std::cout << "in insert, we are not creating a root\n";
          if (LADYBUG)   std::cout << "  in node " << iDebug << ": " << itr->keys.size() << " keys, " << itr->childs.size() << " childs\n";
@@ -177,6 +177,7 @@ if (LADYBUG) std::cout << "in split, current has " << current->keys.size() << " 
         root=nr;
         root->childs[0]=current; //constructor given standard pair creates nullptrs in index 0 & 1
         root->childs[1]=right;
+        root->setLeaf(false);
 
         node<T>* lft=root->childs[0];
         if (LADYBUG) std::cout << "   left now has: ";
@@ -193,6 +194,7 @@ if (LADYBUG) std::cout << "in split, current has " << current->keys.size() << " 
 
 
     } else {
+        current->parent->setLeaf(false);
         int idxToInsert = current->parent->getIndex(medianKey.first);//get index to insert key in parent
 		current->parent->insertKey(medianKey,idxToInsert);//insert key into parent
 	
