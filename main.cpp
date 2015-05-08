@@ -8,9 +8,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-    
 
-    btree<std::string> imCoveredInBees(4,false);
+    btree<std::string> imCoveredInBees(4);
     std::pair<unsigned int,std::string> wasp = {5,"five"};
     imCoveredInBees.insert(wasp);
     std::pair<unsigned int,std::string> hornet = {10,"ten"};
@@ -21,8 +20,9 @@ int main(int argc, char *argv[])
     imCoveredInBees.insert(honeybee);
     std::cout << "in order print: ";
     imCoveredInBees.inOrder();
-    imCoveredInBees.printLevel(0);
-    imCoveredInBees.printLevel(1);
+    //imCoveredInBees.printLevel(0);
+    //imCoveredInBees.printLevel(1);
+    imCoveredInBees.breadthFirst();
 
     /*std::pair<unsigned int,std::string> sp;
     sp=imCoveredInBees.search(10);
@@ -31,4 +31,5 @@ int main(int argc, char *argv[])
     }*/
 
     return a.exec();
+    //return 0;
 }
