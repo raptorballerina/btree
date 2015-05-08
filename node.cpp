@@ -1,41 +1,59 @@
 #include "node.h"
-bool LADYBUG=true;
+
+bool LADYBUG=true; //set to true for debug statements
 
 template <class T>
 node<T>::node(unsigned int dgree)
 {
-	degree=dgree;//max number of children
-	maxKeys=dgree-1;
-	parent=nullptr;
-	leaf=true;
-	keys.reserve(dgree);
-    childs.reserve(dgree);
-    std::cout << "new node created\n";
+    degree=dgree; //max number of children = n
+    maxKeys=dgree-1; //max number of keys = n-1
+    parent=nullptr; //parent pointer defaults to null
+    leaf=true; //leaf defaults to true for no children
+    keys.reserve(dgree); //reserve key vector size, needs to allow overflow by 1
+    childs.reserve(dgree); //reserve child pointer vector size
+    if (LADYBUG) { std::cout << "new empty node created\n"; }
 }
 
 template <class T>
-node<T>::node(unsigned int dgree,const std::pair<unsigned int,T> &pear)
+node<T>::node(unsigned int dgree, const std::pair<unsigned int, T> &pear)
 {
-	degree=dgree;
-	maxKeys=dgree-1;
-	parent=nullptr;
-	leaf=true;
-	keys.reserve(dgree);
+    degree=dgree;
+    maxKeys=dgree-1;
+    parent=nullptr;
+    leaf=true;
+    keys.reserve(dgree);
+    childs.reserve(dgree);
+    keys.push_back(pear); //insert key value into key vector
+    childs.push_back(nullptr); //do this twice:
+    childs.push_back(nullptr); //1 key, 2 child pointers
+    if (LADYBUG) { std::cout << "new node with key and child nullptrs created\n"; }
+}
+
+template <class T>
+node<T>::node(unsigned int dgree, const std::pair<unsigned int, T> &pear, node<T> *left, node<T> *right)
+{
+    degree=dgree;
+    maxKeys=dgree-1;
+    parent=nullptr;
+    keys.reserve(dgree);
     childs.reserve(dgree);
     keys.push_back(pear);
-    childs.push_back(nullptr); //do this twice because you will have one key here
-    childs.push_back(nullptr); //need 2 child pointers
-    std::cout << "new node created\n";
-}
-
-template <class T>
-void node<T>::addKey(std::pair<unsigned int,T> &pear) {
-    keys.push_back(pear); //add pair to key vector
+    childs.push_back(left); //push left node pointer first
+    childs.push_back(right); //push right node pointer second
+    if (left==nullptr && right==nullptr) {
+        leaf=true; //leaf true if both child pointers null
+    } else if (left!=nullptr && right!=nullptr) {
+        leaf=false; //leaf false if both child pointers not null
+    } else {
+        leaf=false; //still make leaf false, but something went wrong here
+        if (LADYBUG) { std::cout << "one of the constructor pointers is null, this is bad form\n"; }
+    }
+    if (LADYBUG) { std::cout << "new node with key and child pointers created\n"; }
 }
 
 template <class T>
 void node<T>::addChild(node* child) {
-    childs.push_back(child);
+	childs.push_back(child);
 }
 
 /* //LETTING THE TREE HANDLE THE INSERT
@@ -56,7 +74,7 @@ void node::insert(node* nd,const std::pair<int,T> &pear) //INCOMPLETE
 	if (keys.size()==0) {
 		keys.push_back(pear);
 	} else {
-		int idx=getIndex(pear.first); 
+		int idx=getIndex(pear.first);
 		if (idx==keys.size()) {
 			keys.push_back(pear)
 		} else {
@@ -64,7 +82,6 @@ void node::insert(node* nd,const std::pair<int,T> &pear) //INCOMPLETE
 		}
 		if (keys.size() == maxKeys)
 			split(parent);
-						
 	}
 }
 */
@@ -87,16 +104,16 @@ void node::split(node* parent){
 		right->addChild[childs[j]);
 	}
 	right->addChild[childs[j]];
-	
+
 	//Insert medianKey into correct place in parent
 	//use getindex and insert on parent
-	
+
 	//insert left and right child ptrs into correct place in parent
 	//left ptr is same index as above, right ptr is that index + 1
-	//need to "move over" 
+	//need to "move over"
 	//if parent->getNumKeys() > maxKeys, call split on parent
-	
-	
+
+
 }*/
 
 /* Lol we don't need this either
@@ -106,7 +123,6 @@ void node::split(){//doesn't need to pass in parent ptr because parent ptr is at
 
 
 	//need to check if we're at root here and do a separate thing for that
-		
 
 
 
@@ -156,53 +172,71 @@ void node::split(){//doesn't need to pass in parent ptr because parent ptr is at
 	
 }*/
 
-
 //returns node pointer to traverse down
 template <class T>
-node<T>* node<T>::getNode(std::pair<unsigned int,T> &pear)
+node<T>* node<T>::getNode(std::pair<unsigned int, T> &pear)
 {
-	int idx=getIndex(pear.first);
-	return childs[idx];
+    unsigned int idx=getIndex(pear.first);
+    return childs[idx];
+}
+template <class T>
+node<T>* node<T>::getNode(unsigned int keyValue)
+{
+    unsigned int idx=getIndex(keyValue);
+    return childs[idx];
 }
 
+//returns index for insert or exists using binary search
 template <class T>
-//return index for insert or exists using binary search
 unsigned int node<T>::getIndex(unsigned int keyValue)
 {
     int lo=0;
-	int hi=keys.size()-1;
+    int hi=keys.size()-1;
     unsigned int idx=0;
     while (lo<=hi) {
-		idx=(lo+hi)/2;
-		if (keyValue<=keys[idx].first) {
-			hi=idx-1;
-		} else { //keyValue>keys[idx].first
-			lo=idx+1;
-		}
-	}
-    /*if (LADYBUG) {
+        idx=(lo+hi)/2;
+        if (keyValue<=keys[idx].first) {
+            hi=idx-1;
+        } else { //keyValue>keys[idx].first
+            lo=idx+1;
+        }
+    }
+    if (LADYBUG) {
         std::cout << "in get index, value " << keyValue << " at index " << lo << "\n";
-    }*/
-	return lo;
+    }
+    return lo;
 }
 
 template <class T>
 bool node<T>::keyExists(unsigned int keyValue)
-
 {
-	int idx=getIndex(keyValue);
-	//getindex returns keys.size when value greater than all keys
-	if (idx==keys.size()) {
-		return false;
-	} else {
-		return keyValue==keys[idx].first;
-	}
+    int idx=getIndex(keyValue);
+    if (idx==keys.size()) {
+        return false; //search value was greater than all values in keys
+    } else {
+        return keyValue==keys[idx].first; //return if values equal or not
+    }
+}
+
+template <class T>
+T node<T>::getKeyData(unsigned int keyValue)
+{
+    unsigned int idx=getIndex(keyValue);
+    if (idx>=keys.size()) {
+        std::cout << "in getkeydata, nothing found for keyvalue " << keyValue << "\n";
+    }
+    if (keyValue!=keys[idx].first) {
+        std::cout << "in getkeydata, nothing found for keyvalue " << keyValue << "\n";
+    } else { //keyValue==keys[idx].first)
+       return keys[idx].second;
+    }
+    return T(); //defaults to return as if nothing was found
 }
 
 template <class T>
 bool node<T>::deleteKey(unsigned int keyValue)
 {
-	int idx=getIndex(keyValue);
+	/*int idx=getIndex(keyValue);
 	//getindex returns keys.size when value greater than all keys
 	if (idx==keys.size()) {
 		if (LADYBUG) {
@@ -213,25 +247,61 @@ bool node<T>::deleteKey(unsigned int keyValue)
 	if (keyValue==keys[idx].first) {
         keys.erase(keys.begin()+idx);
 		return true;
-	}
+	}*/
 }
 
 template <class T>
-std::pair<bool,T> node<T>::search(unsigned int keyValue)
+std::pair<bool, T> node<T>::search(unsigned int keyValue)
 {
-    std::pair<bool,T> pear; //standard pair to return
-    unsigned int i=0;
+    /*std::pair<bool,T> pear; //return object
+    unsigned int idx=getIndex(keyValue);
+    if (keys[i].first==keyValue) {
+        return std::make_pair(true, keys[i].second);
+    } else {
+        return childs[i]->
+    if (idx==keys.size()) {
+        //go down tail pointer
+        //return std::make_pair(false, T());
+    }*/
+
+    /*unsigned int i=0;
     while (i<keys.size() && keyValue>keys[i].first) {
-		i++; //increment iterator until end of keys or search < = actual key value
-	}
+        i++; //increment iterator until end of keys or search < = actual key value
+    }
     if (keys[i].first==keyValue) { //value found, return true/templated object
-		pear = std::make_pair(true,keys[i].second);
-	}
-	if (leaf) { //if this node is a leaf, could not find value
+        pear = std::make_pair(true,keys[i].second);
+    }
+    if (leaf) { //if this node is a leaf, could not find value
         pear = std::make_pair(false,T());
-	}
-	pear = childs[i]->search(keyValue); //go to the next child node
-	return pear;
+    }
+    pear = childs[i]->search(keyValue); //go to the next child node
+    return pear;*/
+}
+
+//decides where in node key value should go and adds child pointer accordingly, for non empty nodes
+template <class T>
+void node<T>::insert(unsigned int keyValue, node<T> *childPtr)
+{
+    unsigned int idx = getIndex(keyValue);
+    keys.insert(keys.begin()+idx, keyValue);
+    if (idx!=0) { //if insert index is 0, ptr goes to left of key, else right
+        idx++;
+    }
+    childs.insert(childs.begin()+idx, childPtr);
+    if (keys.size()==1) { //if node was empty to begin with, warn user
+        childs.push_back(nullptr); //set right child ptr to null
+        if (LADYBUG) { std::cout << "not a good idea to insert in empty node, set right child ptr\n"; }
+    }
+}
+
+template <class T>
+void node<T>::addKey(std::pair<unsigned int,T> &pear) {
+    keys.push_back(pear); //add pair to key vector
+}
+template <class T>
+void node<T>::insertChild(node* child, unsigned int i)
+{
+    childs.insert(childs.begin()+i, child);
 }
 
 template <class T>

@@ -2,12 +2,41 @@
 
 
 template <class T>
+void btree<T>::breadthFirst() //similar to breadth first
+{
+    if (root==nullptr) return;
+
+    //create queue and push root
+    std::queue<node<T>*> qu;
+    qu.push(root);
+
+    //print items at front of queue & pop off
+    std::cout << " | ";
+    while (!qu.empty()) {
+        node<T> *nd = qu.front();
+        unsigned int i=0;
+        for (; i<nd->keys.size(); i++) {
+            std::cout << nd->keys[i].second << " ";
+        }
+        std::cout << " | ";
+        qu.pop();
+        for (unsigned int i=0; i<nd->childs.size(); i++) {
+            if (nd->childs[i]!=nullptr) {
+                qu.push(nd->childs[i]);
+            }
+        }
+    }
+    std::cout << "\n";
+}
+/*
+template <class T>
 void btree<T>::printLevel(int level)
 {
     if (root!=nullptr) {
         printLevel(root,level);
     }
 }
+
 template <class T>
 void btree<T>::printLevel(node<T> *nd, int level)
 {
@@ -27,7 +56,7 @@ void btree<T>::printLevel(int level)
 
         }
 
-        /*std::cout << "this is an attempt to print level " << level << "\n";
+        std::cout << "this is an attempt to print level " << level << "\n";
         for (unsigned int i=0; i<lev; i++) {
             if (nd->childs.size()>0) {
                 std::cout << "  at level " << i << ": " << nd->keys.size() << " keys\n";
@@ -47,9 +76,9 @@ void btree<T>::printLevel(int level)
         for (unsigned int i=0; i<nd->keys.size(); i++) {
             std::cout << nd->keys[i].second << " ";
         }
-        std::cout << "\n";*/
+        std::cout << "\n";
     }
-}
+}*/
 
 template <class T>
 void btree<T>::insert(std::pair<unsigned int,T> &pear)
@@ -131,7 +160,7 @@ std::cout << "in split, current has " << current->keys.size() << " keys, " << cu
         current->keys.pop_back();
         current->childs.pop_back();
     }//do not need to remove last child here*/
-	
+
     /*std::cout << "in split, current has " << current->keys.size() << " keys\n";
     std::cout << "in split, current has " << current->childs.size() << " childs\n";
 
