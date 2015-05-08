@@ -5,9 +5,29 @@ template <class T>
 void btree<T>::printLevel(int level)
 {
     if (root!=nullptr) {
+        printLevel(root,level);
+    }
+}
+template <class T>
+void btree<T>::printLevel(node<T> *nd, int level)
+{
+    unsigned int lvl = (unsigned int)level;
+    for (unsigned int i=0; i<nd->keys.size(); i++) {
+        //
+    }
+}
+
+template <class T>
+void btree<T>::printLevel(int level)
+{
+    if (root!=nullptr) {
         node<T> *nd=root;
         unsigned int lev=(unsigned int)level;
-        std::cout << "this is an attempt to print level " << level << "\n";
+        for (unsigned int i=0; i<lev; i++) {
+
+        }
+
+        /*std::cout << "this is an attempt to print level " << level << "\n";
         for (unsigned int i=0; i<lev; i++) {
             if (nd->childs.size()>0) {
                 std::cout << "  at level " << i << ": " << nd->keys.size() << " keys\n";
@@ -27,7 +47,7 @@ void btree<T>::printLevel(int level)
         for (unsigned int i=0; i<nd->keys.size(); i++) {
             std::cout << nd->keys[i].second << " ";
         }
-        std::cout << "\n";
+        std::cout << "\n";*/
     }
 }
 
@@ -38,8 +58,7 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
         node<T> *nd=new node<T>(degree,pear);
         root = nd;
         std::cout << "in insert, we are creating a root\n";
-        std::cout << "  root node: " << nd->keys.size() << " keys\n";
-        std::cout << "  root node: " << nd->childs.size() << " childs\n";
+        std::cout << "  root node: " << nd->keys.size() << " keys, " << nd->childs.size() << " childs\n";
     } else {
         node<T>* itr = root;
         unsigned int iDebug=0;
@@ -58,8 +77,7 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
         if (itr->getNumKeys() == degree) {
             //std::cout << "\n";
             std::cout << "in insert, we are not creating a root\n";
-            std::cout << "  in node " << iDebug << ": " << itr->keys.size() << " keys\n";
-            std::cout << "  in node " << iDebug << ": " << itr->childs.size() << " childs\n";
+            std::cout << "  in node " << iDebug << ": " << itr->keys.size() << " keys, " << itr->childs.size() << " childs\n";
             split(itr);
         }
     }
@@ -87,14 +105,13 @@ void btree<T>::inOrder()
 template <class T>
 void btree<T>::split(node<T>* current){//current becomes left node!
 
-std::cout << "in split before anything happens, current has " << current->keys.size() << " keys\n";
-std::cout << "in split before anything happens, current has " << current->childs.size() << " childs\n";
+    std::cout << "in split (begin), current has " << current->keys.size() << " keys, " << current->childs.size() << " childs\n";
 
     node<T>* right = new node<T>(degree);//make right node
 	right->parent = current->parent;//set right's parent
 	int median = (current->keys.size() - 1) / 2;
 	std::pair <int,T> medianKey = current->keys[median];
-    unsigned int j = median + 1;
+    unsigned int j = median+1;
     for (; j< current->keys.size(); j++) {//add right keys and children from current to right node
 		right->addKey(current->keys[j]);
         right->addChild(current->childs[j]);
@@ -102,14 +119,13 @@ std::cout << "in split before anything happens, current has " << current->childs
     right->addChild(current->childs[j]);//add last child
 
     //int toRemove = current->keys.size() / 2 + 1;//how many keys to remove from current
-    unsigned int k = median + 1;
-    for (; k < current->keys.size(); k++) {
+    unsigned int k = median-1;
+    for (; k <= current->keys.size(); k++) {
         std::cout << "popped index " << k << ": " << current->keys[k].second << "\n";
         current->keys.pop_back();
         current->childs.pop_back();
     } //do not need to remove last child here
-std::cout << "in split, current has " << current->keys.size() << " keys\n";
-std::cout << "in split, current has " << current->childs.size() << " childs\n";
+std::cout << "in split, current has " << current->keys.size() << " keys, " << current->childs.size() << " childs\n";
 
     /*for (int i=0; i < toRemove; i++){//remove keys and children from current
         current->keys.pop_back();
@@ -129,8 +145,23 @@ std::cout << "in split, current has " << current->childs.size() << " childs\n";
         //current->parent->addChild(right);//add right child
         node<T> *nr=new node<T>(degree,medianKey);
         root=nr;
-        nr->childs[0]=current; //constructor given standard pair creates nullptrs in index 0 & 1
-        nr->childs[1]=right;
+        root->childs[0]=current; //constructor given standard pair creates nullptrs in index 0 & 1
+        root->childs[1]=right;
+
+        node<T>* lft=root->childs[0];
+        std::cout << "   left now has: ";
+        for (unsigned int m=0; m<lft->keys.size(); m++) {
+            std::cout << lft->keys[m].second << " ";
+        }
+        std::cout << "\n";
+        node<T>* rght=root->childs[1];
+        std::cout << "   right now has: ";
+        for (unsigned int m=0; m<rght->keys.size(); m++) {
+            std::cout << rght->keys[m].second << " ";
+        }
+        std::cout << "\n";
+
+
     } else {
         int idxToInsert = current->parent->getIndex(medianKey.first);//get index to insert key in parent
 		current->parent->insertKey(medianKey,idxToInsert);//insert key into parent

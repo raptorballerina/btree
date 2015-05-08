@@ -180,9 +180,9 @@ unsigned int node<T>::getIndex(unsigned int keyValue)
 			lo=idx+1;
 		}
 	}
-	if (LADYBUG) {
+    /*if (LADYBUG) {
         std::cout << "in get index, value " << keyValue << " at index " << lo << "\n";
-	}
+    }*/
 	return lo;
 }
 
