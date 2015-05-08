@@ -22,7 +22,8 @@ int main(int argc, char *argv[])
     imCoveredInBees.inOrder();
     //imCoveredInBees.printLevel(0);
     //imCoveredInBees.printLevel(1);
-    //imCoveredInBees.breadthFirst();
+    std::cout << "\nbreadth first print\n";
+    imCoveredInBees.breadthFirst();
 
     /*std::pair<unsigned int,std::string> sp;
     sp=imCoveredInBees.search(10);

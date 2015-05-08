@@ -311,7 +311,7 @@ void node<T>::inOrder() {
     unsigned int i=0;
     for (;i<keys.size();i++) {
         if (!leaf) {
-            if (LADYBUG)    std::cout << "going down at " << keys[i].second << std::endl;
+            if (LADYBUG) std::cout << "going down at " << keys[i].second << std::endl;
             childs[i]->inOrder();
         } else {
             if (LADYBUG) std::cout << "leaf at " << keys[i].second << std::endl;
