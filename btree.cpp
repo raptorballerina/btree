@@ -196,17 +196,17 @@ template <class T>
 void btree<T>::breadthFirst()
 {
     if (root==nullptr) return;
-    unsigned int level=0;
+    //unsigned int level=0;
     std::queue<node<T>*> qu; //create queue & push root
     qu.push(root);
-    std::cout << " | ";
+    std::cout << "| ";
     while (!qu.empty()) { //print items at front of queue & push root
         node<T> *nd = qu.front();
         unsigned int i=0;
         for (; i<nd->getNumKeys(); i++) {
             std::cout << nd->getPair(i).second << " ";
         }
-        std::cout << " | ";
+        std::cout << "| ";
         qu.pop();
         for (i=0; i<nd->getNumChilds(); i++) {
             if (nd->getChild(i) != nullptr) {
@@ -215,6 +215,47 @@ void btree<T>::breadthFirst()
         }
     }
     std::cout << "\n";
+}
+
+template <class T>
+void btree<T>::breadthFirstLevel(int level)
+{
+    if (root==nullptr) return;
+    int lvl=0;
+    std::queue<std::pair<node<T>*,int> > qu; //create queue
+    std::pair<node<T>*,int> sp;
+    sp.first = root;
+    sp.second = lvl;
+    qu.push(sp); //push root & level
+    std::cout << level << ": | ";
+    while (!qu.empty()) { //print items at front of queue
+        std::pair<node<T>*,int> sp = qu.front();
+        unsigned int i=0; //iterator
+        if (sp.second==level) { //only print if levels match
+            for (; i<sp.first->getNumKeys(); i++) {
+                std::cout << sp.first->getPair(i).second << " ";
+            }
+            std::cout << "| ";
+        }
+        qu.pop();
+        lvl++;
+        for (i=0; i<sp.first->getNumChilds(); i++) {
+            std::pair<node<T>*,int> cp;
+            cp.first = sp.first->getChild(i);
+            cp.second = lvl;
+            qu.push(cp); //push child node & level
+        }
+    }
+    std::cout << "\n";
+}
+
+template <class T>
+void btree<T>::breadthFirstLevels()
+{
+    int n = getNumLevels();
+    for (int i=0; i<n; i++) {
+        breadthFirstLevel(i);
+    }
 }
 
 //NEEDS WORK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
