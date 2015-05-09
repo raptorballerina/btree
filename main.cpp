@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-    btree<std::string> imCoveredInBees(3);
+    btree<std::string> imCoveredInBees(6);
     std::pair<unsigned int,std::string> wasp = {5,"five"};
     imCoveredInBees.insert(wasp);
     std::pair<unsigned int,std::string> hornet = {10,"ten"};

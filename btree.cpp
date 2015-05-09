@@ -43,7 +43,7 @@ void btree<T>::split(node<T>* current)//current becomes left node!
         std::cout << "in split (begin), current has " << current->getNumKeys() <<
                      " keys, " << current->getNumChilds() << " childs\n";
     }
-    node<T>* right = new node<T>(degree);//make right node, creates 2 nullptrs
+    node<T>* right = new node<T>(degree);//make right node
     right->setParent(current->getParent());//set right parent
     int median = (current->getNumKeys() - 1) / 2;
     std::pair<unsigned int,T> medianKey = current->getPair(median);
@@ -60,12 +60,12 @@ void btree<T>::split(node<T>* current)//current becomes left node!
     }
 
     //int toRemove = current->keys.size() / 2 + 1;//how many keys to remove from current
-    unsigned int k = median+1;
+    unsigned int k = median - 1;
     for (; k <= current->getNumKeys(); k++) {
         if (LADYBUG) {
             std::cout << "popped index " << k << ": " << current->getPair(k).second << "\n";
         }
-        current->removeKey(current->getNumKeys()); //remove last key
+        current->removeKey(current->getNumKeys() - 1); //remove last key
         if (right->getNumChilds()>0) { //if there are children, remove them
             current->removeChild(current->getNumChilds()-1);
         }
