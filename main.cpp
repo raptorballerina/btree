@@ -40,17 +40,15 @@ int main(int argc, char *argv[])
     imCoveredInBees.deleteKey(11);
     imCoveredInBees.breadthFirst();
 
-//    std::cout << "breadth first search: ";
+    std::cout << "breadth first print: \n";
     //imCoveredInBees.inOrder();
-    //imCoveredInBees.printLevel(0);
-    //imCoveredInBees.printLevel(1);
- //   std::cout << "\nbreadth first print\n";
-//    imCoveredInBees.breadthFirst();
+    imCoveredInBees.breadthFirstLevels();
 
+    unsigned int k=10;
     std::pair<unsigned int,std::string> sp;
- //   sp=imCoveredInBees.search(10);
-    if (sp.first) {
-        std::cout << sp.second << "\n";
+    sp=imCoveredInBees.search(k);
+    if (k==sp.first) {
+        std::cout << "key " << sp.first << " found with value " << sp.second << "\n";
     }
 
     return a.exec();
