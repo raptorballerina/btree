@@ -1,6 +1,6 @@
 #include "btree.h"
 
-
+bool BUMBLEBEE=false; //set to true for debug statements
 
 template <class T>
 void btree<T>::breadthFirst() //similar to breadth first
@@ -87,8 +87,11 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
     if (root==nullptr) {
         node<T> *nd=new node<T>(degree,pear);
         root = nd;
-        if (LADYBUG) std::cout << "in insert, we are creating a root\n";
-        if (LADYBUG) std::cout << "  root node: " << nd->keys.size() << " keys, " << nd->childs.size() << " childs\n";
+        if (BUMBLEBEE) {
+            std::cout << "in insert, we are creating a root\n";
+            std::cout << "  root node: " << nd->getNumKeys() << " keys, " <<
+                         nd->getNumChilds() << " childs\n";
+        }
     } else {
         node<T>* itr = root;
         unsigned int iDebug=0;
@@ -106,8 +109,11 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
         }
         if (itr->getNumKeys() > itr->getMaxKeys()) {//if too many keys in node, split
             //std::cout << "\n";
-         if (LADYBUG)   std::cout << "in insert, we are not creating a root\n";
-         if (LADYBUG)   std::cout << "  in node " << iDebug << ": " << itr->keys.size() << " keys, " << itr->childs.size() << " childs\n";
+            if (BUMBLEBEE) {
+                std::cout << "in insert, we are not creating a root\n";
+                std::cout << "  in node: " << itr->getNumKeys() << " keys, " <<
+                             itr->getNumChilds() << " childs\n";
+            }
             split(itr);
         }
     }
@@ -124,24 +130,23 @@ std::pair<bool,T> btree<T>::search(unsigned int keyValue)
 }
 
 template <class T>
-std::pair<bool, T> btree<T>::search(node<T>* nd, unsigned int keyValue)
+std::pair<bool,T> btree<T>::search(node<T>* nd, unsigned int keyValue)
 {
     if (nd==nullptr) {
         return std::make_pair<bool,T>(false, T());
     }
     int searchIndex = nd->search(keyValue); //searches current node, return index if found
-    if (searchIndex==-1) { //returns -1 if key not found
+    if (searchIndex==-1) { //index returns -1 if key not found
         node<T> *nn = nd->getNode(keyValue); //gets appropriate node based on key value
         if (nn!=nullptr)
         return search(nn, keyValue); //traverse down that node
     }
     if (searchIndex>=0) { //-1 means item wasn't found
-        T returnData=nd->getDataByIndex(searchIndex);
+        T returnData=nd[searchIndex];
         std::pair<bool, T> pear;
         pear.first = true;
         pear.second = returnData;
         return pear;
-        //return std::make_pair<bool,T>(true, returnData);
     }
 }
 
@@ -184,16 +189,30 @@ void btree<T>::inOrder()
 template <class T>
 void btree<T>::split(node<T>* current){//current becomes left node!
 
-    if (LADYBUG) std::cout << "in split (begin), current has " << current->keys.size() << " keys, " << current->childs.size() << " childs\n";
-
+    if (BUMBLEBEE) {
+        std::cout << "in split (begin), current has " << current->keys.size() <<
+                     " keys, " << current->childs.size() << " childs\n";
+    }
     node<T>* right = new node<T>(degree);//make right node
     right->parent = current->parent;//set right's parent
     int median = (current->keys.size() - 1) / 2;
-    std::pair <int,T> medianKey = current->keys[median];
+    std::pair<int,T> medianKey = current->keys[median];
     unsigned int j = median+1;
     for (; j< current->keys.size(); j++) {//add right keys and children from current to right node
+
+
+
+
+
+
         right->addKey(current->keys[j]);
-        right->addChild(current->childs[j]);
+        right->addChild(current->childs[j]); //do a set child instead
+
+
+
+
+
+
     }
     right->addChild(current->childs[j]);//add last child
 

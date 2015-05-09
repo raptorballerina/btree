@@ -1,6 +1,6 @@
 #include "node.h"
 
-bool LADYBUG=false; //set to true for debug statements
+bool LADYBUG=true; //set to true for debug statements
 
 template <class T>
 node<T>::node(unsigned int dgree)
@@ -52,25 +52,12 @@ node<T>::node(unsigned int dgree, const std::pair<unsigned int, T> &pear, node<T
 }
 
 template <class T>
-void node<T>::addChild(node* child) {
+void node<T>::addChild(node* child)
+{
     childs.push_back(child);
 }
 
-//returns node pointer to traverse down
-template <class T>
-node<T>* node<T>::getNode(std::pair<unsigned int, T> &pear)
-{
-    unsigned int idx=getIndex(pear.first);
-    return childs[idx];
-}
-template <class T>
-node<T>* node<T>::getNode(unsigned int keyValue)
-{
-    unsigned int idx=getIndex(keyValue);
-    return childs[idx];
-}
-
-//returns index for insert or exists using binary search
+//returns closest index, used for insert or exists using binary search
 template <class T>
 unsigned int node<T>::getIndex(unsigned int keyValue)
 {
@@ -91,19 +78,9 @@ unsigned int node<T>::getIndex(unsigned int keyValue)
     return lo;
 }
 
+//returns data value from key value
 template <class T>
-bool node<T>::keyExists(unsigned int keyValue)
-{
-    int idx=getIndex(keyValue);
-    if (idx==keys.size()) {
-        return false; //search value was greater than all values in keys
-    } else {
-        return keyValue==keys[idx].first; //return if values equal or not
-    }
-}
-
-template <class T>
-T node<T>::getDataByKey(unsigned int keyValue)
+T node<T>::getData(unsigned int keyValue)
 {
     unsigned int index=getIndex(keyValue);
     if (index>=keys.size()) { //check the size first so that it won't seg fault
@@ -120,22 +97,25 @@ T node<T>::getDataByKey(unsigned int keyValue)
     return T(); //defaults to return as if nothing was found
 }
 
+//returns node pointer to traverse down
 template <class T>
-T node<T>::getDataByIndex(unsigned int index)
+node<T>* node<T>::getNode(std::pair<unsigned int, T> &pear)
 {
-    if (index>=keys.size()) { //check the size first so that it won't seg fault
-        if (LADYBUG) {
-            std::cout << "in getkeydata, index " << index << " is out of bounds\n";
-        }
-        index=keys.size()-1; //return last index position
-    }
-    return keys[index].second;
+    unsigned int idx=getIndex(pear.first);
+    return childs[idx];
+}
+template <class T>
+node<T>* node<T>::getNode(unsigned int keyValue)
+{
+    unsigned int idx=getIndex(keyValue);
+    return childs[idx];
 }
 
+/*
 template <class T>
 bool node<T>::deleteKey(unsigned int keyValue)
 {
-    /*int idx=getIndex(keyValue);
+    int idx=getIndex(keyValue);
     //getindex returns keys.size when value greater than all keys
     if (idx==keys.size()) {
         if (LADYBUG) {
@@ -146,10 +126,11 @@ bool node<T>::deleteKey(unsigned int keyValue)
     if (keyValue==keys[idx].first) {
         keys.erase(keys.begin()+idx);
         return true;
-    }*/
+    }
     return false;
 }
-
+*/
+//search by key value, return index if found, or -1 if not found
 template <class T>
 int node<T>::search(unsigned int keyValue)
 {
@@ -163,22 +144,22 @@ int node<T>::search(unsigned int keyValue)
     return -1; //default to nothing found
 }
 
-
-
-//decides where in node key value should go and adds child pointer accordingly, for non empty nodes
+//decides where in node key value should go and adds child pointer accordingly
 template <class T>
-void node<T>::insert(unsigned int keyValue, node<T> *childPtr)
+void node<T>::insert(const std::pair<unsigned int, T> &pear,node<T>* childPtr)
 {
-    unsigned int idx = getIndex(keyValue);
-    keys.insert(keys.begin()+idx, keyValue);
-    if (idx!=0) { //if insert index is 0, ptr goes to left of key, else right
-        idx++;
+    unsigned int index = getIndex(pear.first);
+    keys.insert(keys.begin()+index, pear);
+    if (index!=0) { //if insert index > 0, ptr goes to right of key, otherwise left
+        index++;
     }
-    childs.insert(childs.begin()+idx, childPtr);
-    if (keys.size()==1) { //if node was empty to begin with, warn user
+    childs.insert(childs.begin()+index, childPtr);
+    if (keys.size()==1 && childs.size()==1) { //node empty to begin with, check pointers
         childs.push_back(nullptr); //set right child ptr to null
         if (LADYBUG) {
-            std::cout << "not a good idea to insert in empty node, set right child ptr\n";
+            if (childPtr!=nullptr) {
+                std::cout << "inserted into empty node, set right child ptr\n";
+            }
         }
     }
 }
@@ -224,7 +205,7 @@ std::ostream& operator<< (std::ostream &out, node<U> &nd)
 template <class T>
 T node<T>::operator[] (unsigned int index)
 {
-    if (index>=keys.size()) {
+    if (index>=keys.size()) { //check size first so no seg fault
         if (LADYBUG) {
             std::cout << "in [] operator, index " << index << " is out of bounds\n";
         }

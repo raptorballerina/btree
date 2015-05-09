@@ -22,13 +22,16 @@ public:
     void split(node<T> *current);
     void insert(std::pair<unsigned int,T> &pear);
     std::pair<bool,T> search(unsigned int keyValue);
-    std::pair<bool,T> search(node<T> *nd, unsigned int keyValue);
+    //functions:
     void inOrder();
     //void printLevel(int level);
     void breadthFirst();
 private:
+    //properties:
     node<T> *root;
     unsigned int degree;
+    //functions:
+    std::pair<bool,T> search(node<T> *nd, unsigned int keyValue); //recursive search
 };
 
 #include "btree.cpp"
