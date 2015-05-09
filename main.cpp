@@ -25,11 +25,20 @@ int main(int argc, char *argv[])
     std::pair<unsigned int,std::string> bee = {11,"eleven"};
     imCoveredInBees.insert(bee);
     imCoveredInBees.breadthFirst();
-    std::pair<unsigned int,std::string> notBee = {1, "one"};
+    std::pair<unsigned int,std::string> notBee = {2, "two"};
     imCoveredInBees.insert(notBee);
     imCoveredInBees.breadthFirst();
+    std::pair<unsigned int,std::string> woodBee = {13,"thirteen"};
+    imCoveredInBees.insert(woodBee);
+    imCoveredInBees.breadthFirst();
+    std::pair<unsigned int,std::string> queenBee = {9, "nine"};
+    imCoveredInBees.insert(queenBee);
+    imCoveredInBees.breadthFirst();
+    std::pair<unsigned int,std::string> workerBee = {6, "six"};
+    imCoveredInBees.insert(workerBee);
+    imCoveredInBees.breadthFirst();
 
-    std::cout << "\nin order print: ";
+    std::cout << "breadth first search: ";
     //imCoveredInBees.inOrder();
     //imCoveredInBees.printLevel(0);
     //imCoveredInBees.printLevel(1);
