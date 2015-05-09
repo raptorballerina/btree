@@ -1,6 +1,6 @@
 #include "btree.h"
 
-bool BUMBLEBEE=true; //set to true for debug statements
+bool BUMBLEBEE=false; //set to true for debug statements
 
 template <class T>
 void btree<T>::insert(std::pair<unsigned int,T> &pear)
@@ -15,10 +15,10 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
         }
     } else {
         node<T>* itr = root;
-        unsigned int idx=0;
+        unsigned int idx = itr->getIndex(pear.first);
         while (!itr->isLeaf()){
-            idx = itr->getIndex(pear.first);
             itr = itr->getChild(idx);
+            idx = itr->getIndex(pear.first);
         }
         if (idx == itr->getNumKeys()) {//if idx > rest of node, just push it to the back of the vector
             itr->addKey(pear);
@@ -62,15 +62,15 @@ void btree<T>::split(node<T>* current)//current becomes left node!
     //int toRemove = current->keys.size() / 2 + 1;//how many keys to remove from current
     unsigned int k = median - 1;
     for (; k <= current->getNumKeys(); k++) {
-        if (LADYBUG) {
+        if (BUMBLEBEE) {
             std::cout << "popped index " << k << ": " << current->getPair(k).second << "\n";
         }
-        current->removeKey(current->getNumKeys() - 1); //remove last key
+        current->removeKey(k);
         if (right->getNumChilds()>0) { //if there are children, remove them
-            current->removeChild(current->getNumChilds()-1);
+            current->removeChild(k);
         }
     } //do not need to remove last child here
-    if (LADYBUG) {
+    if (BUMBLEBEE) {
         std::cout << "in split, current has " << current->getNumKeys() << " keys, " <<
                      current->getNumChilds() << " childs\n";
     }
@@ -96,17 +96,17 @@ void btree<T>::split(node<T>* current)//current becomes left node!
         root->addChild(right);
         //removed set leaf, node isLeaf() function checks this for us
         node<T> *lft = root->getChild(0); //replaces: node<T>* lft=root->childs[0];
-        if (LADYBUG) std::cout << "   left now has: ";
+        if (BUMBLEBEE) std::cout << "   left now has: ";
         for (unsigned int m=0; m<lft->getNumKeys(); m++) {
             std::cout << lft->getPair(m).second << " ";
         }
-        if (LADYBUG) std::cout << "\n";
+        if (BUMBLEBEE) std::cout << "\n";
         node<T>* rght=root->getChild(1);
-        if (LADYBUG) std::cout << "   right now has: ";
+        if (BUMBLEBEE) std::cout << "   right now has: ";
         for (unsigned int m=0; m<rght->getNumKeys(); m++) {
-           if (LADYBUG) std::cout << rght->getPair(m).second << " ";
+           if (BUMBLEBEE) std::cout << rght->getPair(m).second << " ";
         }
-        if (LADYBUG) std::cout << "\n";
+        if (BUMBLEBEE) std::cout << "\n";
 
 
     } else {
