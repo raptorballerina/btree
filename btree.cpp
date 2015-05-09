@@ -51,17 +51,16 @@ void btree<T>::split(node<T>* current)//current becomes left node!
     for (; j< current->getNumKeys(); j++) {//add right keys and children from current to right node
         std::pair<unsigned int,T> sp = current->getPair(j);
         right->addKey(sp);
-        if (right->getNumChilds()>0) { //if there are children, add them
+        if (current->getNumChilds()>0) { //if there are children, add them
             right->addChild(current->getChild(j));
         }
     }
-    if (right->getNumChilds()>0) { //if there are children, add last child
+    if (current->getNumChilds()>0) { //if there are children, add last child
         right->addChild(current->getChild(j));
     }
-
     //int toRemove = current->keys.size() / 2 + 1;//how many keys to remove from current
-    unsigned int k = median - 1;
-    for (; k <= current->getNumKeys(); k++) {
+    unsigned int k = current->getNumKeys() - 1;
+    for (; k>=median; k--) {
         if (BUMBLEBEE) {
             std::cout << "popped index " << k << ": " << current->getPair(k).second << "\n";
         }
@@ -96,11 +95,13 @@ void btree<T>::split(node<T>* current)//current becomes left node!
         root->addChild(right);
         //removed set leaf, node isLeaf() function checks this for us
         node<T> *lft = root->getChild(0); //replaces: node<T>* lft=root->childs[0];
-        if (BUMBLEBEE) std::cout << "   left now has: ";
-        for (unsigned int m=0; m<lft->getNumKeys(); m++) {
-            std::cout << lft->getPair(m).second << " ";
+        if (BUMBLEBEE) {
+            std::cout << "   left now has: ";
+            for (unsigned int m=0; m<lft->getNumKeys(); m++) {
+                std::cout << lft->getPair(m).second << " ";
+            }
+            std::cout << "\n";
         }
-        if (BUMBLEBEE) std::cout << "\n";
         node<T>* rght=root->getChild(1);
         if (BUMBLEBEE) std::cout << "   right now has: ";
         for (unsigned int m=0; m<rght->getNumKeys(); m++) {
