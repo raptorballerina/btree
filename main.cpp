@@ -37,13 +37,15 @@ int main(int argc, char *argv[])
     std::pair<unsigned int,std::string> workerBee = {6, "six"};
     imCoveredInBees.insert(workerBee);
     imCoveredInBees.breadthFirst();
+    imCoveredInBees.deleteKey(11);
+    imCoveredInBees.breadthFirst();
 
-    std::cout << "breadth first search: ";
+//    std::cout << "breadth first search: ";
     //imCoveredInBees.inOrder();
     //imCoveredInBees.printLevel(0);
     //imCoveredInBees.printLevel(1);
  //   std::cout << "\nbreadth first print\n";
-    imCoveredInBees.breadthFirst();
+//    imCoveredInBees.breadthFirst();
 
     std::pair<unsigned int,std::string> sp;
  //   sp=imCoveredInBees.search(10);

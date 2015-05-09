@@ -2,6 +2,71 @@
 
 bool BUMBLEBEE=true; //set to true for debug statements
 
+
+
+template <class T>
+void btree<T>::deleteKey(unsigned int keyVal) {
+    if (root != nullptr) {
+        deleteKey(keyVal, root);
+    }
+}
+
+template <class T>
+void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {
+    unsigned int idx;
+    if ((idx = nd->searchNode(keyVal)) != -1) {//if the key we're looking for is in current node
+        if (nd->isLeaf()) {
+            for (unsigned int i=0; i<nd->getNumKeys(); i++) {
+                if (nd->getPair(i).first == keyVal) {//delete key
+                    nd->removeKey(i);
+                    nd->removeChild(i);
+                }
+            }
+        } else {
+            //if childs[i] has  <= t keys, replace the key we want to get rid of w/ last key of that node and recursively delete it from that node
+            node<T>* leftChild = nd->getChild(nd->getIndex(keyVal));
+            node<T>* rightChild = nd->getChild(nd->getIndex(keyVal)+1);
+            std::pair<unsigned int,T> temp;
+            if (leftChild->getNumKeys() >= degree){
+                temp = leftChild->getPair(leftChild->getNumKeys()-1);
+                nd->setKey(idx,temp);
+
+                deleteKey(leftChild->getPair(leftChild->getNumKeys()-1).first,leftChild);
+            } else if (rightChild->getNumKeys() >= degree){ //if childs[i] has < t keys, do pretty much the same thing with the right child except we get the leftmost key instead
+                temp = rightChild->getPair(0);
+                nd->setKey(idx,temp);
+                deleteKey(rightChild->getKey(0),rightChild);
+            } else {
+                //if right and left children both have t-1 keys:
+                //move the key we want to delete and everything in rightChild to leftChild, deleting ptr to rightChild from nd
+                //recursively delete key we want to delete from leftChild
+                temp = nd->getPair(idx);
+                leftChild->addKey(temp);//add key to delete to left node
+                for (unsigned int i=0; i < rightChild->getNumKeys(); i++) {//add rightChild's keys to leftChild
+                    temp = rightChild->getPair(i);
+                    leftChild->addKey(temp);
+                }
+                for (unsigned int i=0; i < rightChild->getNumChilds(); i++) {//add rightChild's children to leftChild
+                    leftChild->addChild(rightChild->getChild(i));
+                }
+                nd->removeKey(idx);
+                nd->removeChild(idx+1);
+                delete rightChild;
+                deleteKey(keyVal,leftChild);
+            }
+        }
+    } else {//if the key we want to delete is not in the current node
+        unsigned int idxToTraverse = nd->getIndex(keyVal);
+        node<T>* childToCheck = nd->getChild(idxToTraverse);
+        if (childToCheck->getNumKeys >= degree)
+            deleteKey(keyVal,childToCheck);
+        else {//Do the same thing as above
+
+        }
+    }
+
+}
+
 template <class T>
 void btree<T>::insert(std::pair<unsigned int,T> &pear)
 {
@@ -161,6 +226,8 @@ void btree<T>::inOrder()
         std::cout << "\n";
     }
 }
+
+
 
 template <class T>
 std::pair<bool,T> btree<T>::search(unsigned int keyValue)

@@ -33,7 +33,7 @@ public:
     //functions:
     void insert(const std::pair<unsigned int, T> &pear,node<T>* childPtr=nullptr);
         //bool deleteKey(unsigned int keyValue);
-    int search(unsigned int keyValue);
+    int searchNode(unsigned int keyValue);
 
     bool removeKey(unsigned int index);
     bool removeChild(unsigned int index);
@@ -44,7 +44,7 @@ public:
     void setChild(node* child, unsigned int index){childs[index] = child;}
     void setLeaf(bool val){leaf=val;}
     void insert(unsigned int keyValue, node<T> *childPtr=nullptr);
-
+    void setKey(unsigned int idx, std::pair<unsigned int, T> &pear){keys[idx] = pear;}
 //	bool isRoot(){return root;}
     void inOrder();
 	//properties:

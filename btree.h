@@ -25,12 +25,14 @@ public:
     void breadthFirst();
     void inOrder();
     std::pair<bool,T> search(unsigned int keyValue);
+    void deleteKey(unsigned int keyVal);
 private:
     //properties:
     node<T> *root;
     unsigned int degree;
     //functions:
     std::pair<bool,T> search(node<T> *nd, unsigned int keyValue); //recursive search
+    void deleteKey(unsigned int keyVal, node<T>* nd);
 };
 
 #include "btree.cpp"

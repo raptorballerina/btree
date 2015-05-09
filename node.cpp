@@ -165,7 +165,7 @@ bool node<T>::deleteKey(unsigned int keyValue)
 */
 //search by key value, return index if found, or -1 if not found
 template <class T>
-int node<T>::search(unsigned int keyValue)
+int node<T>::searchNode(unsigned int keyValue)
 {
     unsigned int index = getIndex(keyValue);
     if (index >= keys.size()) { //check size so no seg fault
