@@ -20,7 +20,7 @@ public:
 
     //getters:
     unsigned int getDegree() { return degree; }
-    unsigned int getMaxKeys() { return maxKeys; }
+    unsigned int getMaxKeys() { return 2 * degree - 1; }//changed
     unsigned int getNumKeys() { return keys.size(); }
     bool isLeaf() { return leaf; }
     unsigned int getIndex(unsigned int keyValue);
@@ -58,8 +58,8 @@ public:
 private:
 
     //properties:
-    unsigned int degree; //maximum children, n
-    unsigned int maxKeys; //maximum keys, n-1
+    unsigned int degree; //t, minimum number of children
+    unsigned int maxKeys; //maximum keys, 2t-1
     bool leaf; //childless, true
 
     //objects:

@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-    btree<std::string> imCoveredInBees(4);
+    btree<std::string> imCoveredInBees(3);
     std::pair<unsigned int,std::string> wasp = {5,"five"};
     imCoveredInBees.insert(wasp);
     std::pair<unsigned int,std::string> hornet = {10,"ten"};
@@ -18,15 +18,20 @@ int main(int argc, char *argv[])
     imCoveredInBees.insert(bumblebee);
     std::pair<unsigned int,std::string> honeybee = {3,"three"};
     imCoveredInBees.insert(honeybee);
+    std::pair<unsigned int,std::string> bee = {11,"eleven"};
+    imCoveredInBees.insert(bee);
+    std::pair<unsigned int,std::string> notBee = {1, "one"};
+    imCoveredInBees.insert(notBee);
+
     std::cout << "\nin order print: ";
     imCoveredInBees.inOrder();
     //imCoveredInBees.printLevel(0);
     //imCoveredInBees.printLevel(1);
-    std::cout << "\nbreadth first print\n";
-    imCoveredInBees.breadthFirst();
+ //   std::cout << "\nbreadth first print\n";
+//    imCoveredInBees.breadthFirst();
 
     std::pair<unsigned int,std::string> sp;
-    sp=imCoveredInBees.search(10);
+ //   sp=imCoveredInBees.search(10);
     if (sp.first) {
         std::cout << sp.second << "\n";
     }

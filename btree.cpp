@@ -104,7 +104,7 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
             itr->insertKey(pear,idx);//insert key in the correct position
             itr->addChild(nullptr);
         }
-        if (itr->getNumKeys() == degree) {//if too many keys in node, split
+        if (itr->getNumKeys() > itr->getMaxKeys()) {//if too many keys in node, split
             //std::cout << "\n";
          if (LADYBUG)   std::cout << "in insert, we are not creating a root\n";
          if (LADYBUG)   std::cout << "  in node " << iDebug << ": " << itr->keys.size() << " keys, " << itr->childs.size() << " childs\n";
@@ -252,7 +252,7 @@ if (LADYBUG) std::cout << "in split, current has " << current->keys.size() << " 
         //insert right ptr into correct position in parent (idxToInsert + 1)
         current->parent->insertChild(right,idxToInsert + 1);
 
-        if (current->parent->getNumKeys() == degree) {//if the parent is full, we split the parent
+        if (current->parent->getNumKeys() > current->parent->getMaxKeys()) {//if the parent is full, we split the parent
             split(current->parent);
         }
     }
