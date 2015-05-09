@@ -24,11 +24,11 @@ int main(int argc, char *argv[])
     imCoveredInBees.insert(notBee);
 
     std::cout << "\nin order print: ";
-    imCoveredInBees.inOrder();
+    //imCoveredInBees.inOrder();
     //imCoveredInBees.printLevel(0);
     //imCoveredInBees.printLevel(1);
  //   std::cout << "\nbreadth first print\n";
-//    imCoveredInBees.breadthFirst();
+    imCoveredInBees.breadthFirst();
 
     std::pair<unsigned int,std::string> sp;
  //   sp=imCoveredInBees.search(10);

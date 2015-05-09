@@ -19,13 +19,12 @@ All leaves appear in the same level, and carry information.
 public:
     btree(unsigned int dgree):root(nullptr),degree(dgree){}
     unsigned int getDegree(){return degree;}
-    void split(node<T> *current);
     void insert(std::pair<unsigned int,T> &pear);
-    std::pair<bool,T> search(unsigned int keyValue);
+    void split(node<T> *current);
     //functions:
-    void inOrder();
-    //void printLevel(int level);
     void breadthFirst();
+    void inOrder();
+    std::pair<bool,T> search(unsigned int keyValue);
 private:
     //properties:
     node<T> *root;

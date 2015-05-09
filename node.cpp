@@ -1,3 +1,4 @@
+#include <limits>
 #include "node.h"
 
 bool LADYBUG=true; //set to true for debug statements
@@ -24,9 +25,7 @@ node<T>::node(unsigned int dgree, const std::pair<unsigned int, T> &pear)
     keys.reserve(2 * dgree); //reserve key vector size, needs to allow overflow by 1
     childs.reserve(2 * dgree); //reserve child pointer vector size
     keys.push_back(pear); //insert key value into key vector
-    childs.push_back(nullptr); //do this twice:
-    childs.push_back(nullptr); //1 key, 2 child pointers
-    if (LADYBUG) { std::cout << "new node with key and child nullptrs created\n"; }
+    if (LADYBUG) { std::cout << "new node with key created\n"; }
 }
 
 template <class T>
@@ -35,18 +34,16 @@ node<T>::node(unsigned int dgree, const std::pair<unsigned int, T> &pear, node<T
     degree=dgree;
     maxKeys=2 * dgree-1;
     parent=nullptr;
+    leaf=false;
     keys.reserve(2 * dgree);
     childs.reserve(2 * dgree - 1);
     keys.push_back(pear);
     childs.push_back(left); //push left node pointer first
     childs.push_back(right); //push right node pointer second
-    if (left==nullptr && right==nullptr) {
-        leaf=true; //leaf true if both child pointers null
-    } else if (left!=nullptr && right!=nullptr) {
-        leaf=false; //leaf false if both child pointers not null
-    } else {
-        leaf=false; //still make leaf false, but something went wrong here
-        if (LADYBUG) { std::cout << "one of the constructor pointers is null, this is bad form\n"; }
+    if (left==nullptr || right==nullptr) {
+        if (LADYBUG) {
+            std::cout << "warning - you are passing in a nullptr to the constructor\n";
+        }
     }
     if (LADYBUG) { std::cout << "new node with key and child pointers created\n"; }
 }
@@ -57,7 +54,7 @@ void node<T>::addChild(node* child)
     childs.push_back(child);
 }
 
-//returns closest index, used for insert or exists using binary search
+//returns closest index based on key, used for insert or exists using binary search
 template <class T>
 unsigned int node<T>::getIndex(unsigned int keyValue)
 {
@@ -76,6 +73,42 @@ unsigned int node<T>::getIndex(unsigned int keyValue)
         std::cout << "in get index, value " << keyValue << " at index " << lo << "\n";
     }
     return lo;
+}
+
+//returns key at index
+template <class T>
+int node<T>::getKey(unsigned int index)
+{
+    if (index>=keys.size()) {
+        return -1;
+    }
+    return (int)keys[index].first;
+}
+
+template <class T>
+std::pair<unsigned int,T> node<T>::getPair(unsigned int index)
+{
+    if (index<keys.size()) {
+        return keys[index];
+    }
+    if (LADYBUG) {
+        std::cout << "in getPair, index " << index << " out of bounds\n";
+    }
+    return std::make_pair<unsigned int,T>(std::numeric_limits<unsigned int>::max(),T());
+}
+
+//returns child node pointer at index
+template <class T>
+node<T>* node<T>::getChild(unsigned int index)
+{
+    if (index<childs.size()) {
+        return childs[index];
+    } else { //index>=childs.size()
+        if (LADYBUG) {
+            std::cout << "in getchild, index " << index << " out of bounds\n";
+        }
+        return nullptr;
+    }
 }
 
 //returns data value from key value
@@ -134,14 +167,45 @@ bool node<T>::deleteKey(unsigned int keyValue)
 template <class T>
 int node<T>::search(unsigned int keyValue)
 {
-    int index = (int)getIndex(keyValue);
-    if (index > (int)keys.size()) {
-        index = (int)keys.size()-1;
+    unsigned int index = getIndex(keyValue);
+    if (index >= keys.size()) { //check size so no seg fault
+        if (LADYBUG) {
+            std::cout << "in node.search, index " << index << " out of bounds\n";
+        }
+        return -1;
     }
     if (keyValue==keys[index].first) {
         return index;
     }
     return -1; //default to nothing found
+}
+
+template <class T>
+bool node<T>::removeKey(unsigned int index)
+{
+    if (index<keys.size()) {
+        keys.erase(keys.begin()+index);
+        return true;
+    } else {
+        if (LADYBUG) {
+            std::cout << "in removeKey, index " << index << " is out of bounds\n";
+        }
+        return false;
+    }
+}
+
+template <class T>
+bool node<T>::removeChild(unsigned int index)
+{
+    if (index<childs.size()) {
+        childs.erase(childs.begin()+index);
+        return true;
+    } else {
+        if (LADYBUG) {
+            std::cout << "in removeChild, index " << index << " is out of bounds\n";
+        }
+        return false;
+    }
 }
 
 //decides where in node key value should go and adds child pointer accordingly
@@ -193,17 +257,17 @@ void node<T>::inOrder() {
 
 //print data values in a node
 template <class U>
-std::ostream& operator<< (std::ostream &out, node<U> &nd)
+std::ostream& operator<<(std::ostream &out, node<U> &nd)
 {
     for (unsigned int i=0; i<nd.keys.size(); i++) {
-        std::cout << nd.keys[i] << " ";
+        std::cout << nd.keys[i].second << " ";
     }
     return out;
 }
 
-//returns key when given an index
+//returns reference to standard pair when given an index, read-only
 template <class T>
-T node<T>::operator[] (unsigned int index)
+std::pair<unsigned int,T>& node<T>::operator[](unsigned int index)
 {
     if (index>=keys.size()) { //check size first so no seg fault
         if (LADYBUG) {
@@ -211,7 +275,7 @@ T node<T>::operator[] (unsigned int index)
         }
         index = keys.size()-1;
     }
-    return keys[index].first;
+    return keys[index];
 }
 
 /*

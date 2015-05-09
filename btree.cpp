@@ -1,91 +1,12 @@
 #include "btree.h"
 
-bool BUMBLEBEE=false; //set to true for debug statements
-
-template <class T>
-void btree<T>::breadthFirst() //similar to breadth first
-{
-    if (root==nullptr) return;
-
-    //create queue and push root
-    std::queue<node<T>*> qu;
-    qu.push(root);
-
-    //print items at front of queue & pop off
-    std::cout << " | ";
-    while (!qu.empty()) {
-        node<T> *nd = qu.front();
-        unsigned int i=0;
-        for (; i<nd->keys.size(); i++) {
-            std::cout << nd->keys[i].second << " ";
-        }
-        std::cout << " | ";
-        qu.pop();
-        for (unsigned int i=0; i<nd->childs.size(); i++) {
-            if (nd->childs[i]!=nullptr) {
-                qu.push(nd->childs[i]);
-            }
-        }
-    }
-    std::cout << "\n";
-}
-/*git.coml
-template <class T>
-void btree<T>::printLevel(int level)
-{
-    if (root!=nullptr) {
-        printLevel(root,level);
-    }
-}
-
-template <class T>
-void btree<T>::printLevel(node<T> *nd, int level)
-{
-    unsigned int lvl = (unsigned int)level;
-    for (unsigned int i=0; i<nd->keys.size(); i++) {
-        //
-    }
-}
-
-template <class T>
-void btree<T>::printLevel(int level)
-{
-    if (root!=nullptr) {
-        node<T> *nd=root;
-        unsigned int lev=(unsigned int)level;
-        for (unsigned int i=0; i<lev; i++) {
-
-        }
-
-        std::cout << "this is an attempt to print level " << level << "\n";
-        for (unsigned int i=0; i<lev; i++) {
-            if (nd->childs.size()>0) {
-                std::cout << "  at level " << i << ": " << nd->keys.size() << " keys\n";
-                std::cout << "  at level " << i << ": " << nd->childs.size() << " childs\n";
-                nd=nd->childs[0];
-            } else {
-                std::cout << "  at level " << i << " child size is 0\n";
-                return;
-            }
-        }
-        if (nd==nullptr) {
-            std::cout << "  level " << level << " does not exist in this tree\n";
-        }
-        std::cout << " first node in level " << level << " has " << nd->keys.size() << " keys\n";
-        std::cout << " first node in level " << level << " has " << nd->childs.size() << " childs\n";
-        std::cout << "Level " << level << ": ";
-        for (unsigned int i=0; i<nd->keys.size(); i++) {
-            std::cout << nd->keys[i].second << " ";
-        }
-        std::cout << "\n";
-    }
-}*/
+bool BUMBLEBEE=true; //set to true for debug statements
 
 template <class T>
 void btree<T>::insert(std::pair<unsigned int,T> &pear)
 {
     if (root==nullptr) {
-        node<T> *nd=new node<T>(degree,pear);
+        node<T> *nd = new node<T>(degree,pear);
         root = nd;
         if (BUMBLEBEE) {
             std::cout << "in insert, we are creating a root\n";
@@ -94,21 +15,17 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
         }
     } else {
         node<T>* itr = root;
-        unsigned int iDebug=0;
+        unsigned int idx=0;
         while (!itr->isLeaf()){
-            itr = itr->getNode(pear);
-            iDebug++;
+            idx = itr->getIndex(pear.first);
+            itr = itr->getChild(idx);
         }
-        unsigned int idx = itr->getIndex(pear.first);//index in which to insert key
         if (idx == itr->getNumKeys()) {//if idx > rest of node, just push it to the back of the vector
             itr->addKey(pear);
-            itr->addChild(nullptr);
         } else {
             itr->insertKey(pear,idx);//insert key in the correct position
-            itr->addChild(nullptr);
         }
         if (itr->getNumKeys() > itr->getMaxKeys()) {//if too many keys in node, split
-            //std::cout << "\n";
             if (BUMBLEBEE) {
                 std::cout << "in insert, we are not creating a root\n";
                 std::cout << "  in node: " << itr->getNumKeys() << " keys, " <<
@@ -120,111 +37,43 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
 }
 
 template <class T>
-std::pair<bool,T> btree<T>::search(unsigned int keyValue)
+void btree<T>::split(node<T>* current)//current becomes left node!
 {
-    if (root!=nullptr) {
-        return search(root, keyValue);
-    } else {
-        return std::make_pair(false,T()); //return false & default T if not found
-    }
-}
-
-template <class T>
-std::pair<bool,T> btree<T>::search(node<T>* nd, unsigned int keyValue)
-{
-    if (nd==nullptr) {
-        return std::make_pair<bool,T>(false, T());
-    }
-    int searchIndex = nd->search(keyValue); //searches current node, return index if found
-    if (searchIndex==-1) { //index returns -1 if key not found
-        node<T> *nn = nd->getNode(keyValue); //gets appropriate node based on key value
-        if (nn!=nullptr)
-        return search(nn, keyValue); //traverse down that node
-    }
-    if (searchIndex>=0) { //-1 means item wasn't found
-        T returnData=nd[searchIndex];
-        std::pair<bool, T> pear;
-        pear.first = true;
-        pear.second = returnData;
-        return pear;
-    }
-}
-
-/*
-std::pair<bool,T> pear; //return object
-unsigned int idx=getIndex(keyValue);
-    if (keys[i].first==keyValue) {
-        return std::make_pair(true, keys[i].second);
-    } else {
-        return childs[i]->
-    if (idx==keys.size()) {
-        //go down tail pointer
-        //return std::make_pair(false, T());
-    }*/
-
-    /*unsigned int i=0;
-    while (i<keys.size() && keyValue>keys[i].first) {
-        i++; //increment iterator until end of keys or search < = actual key value
-    }
-    if (keys[i].first==keyValue) { //value found, return true/templated object
-        pear = std::make_pair(true,keys[i].second);
-    }
-    if (leaf) { //if this node is a leaf, could not find value
-        pear = std::make_pair(false,T());
-    }
-    pear = childs[i]->search(keyValue); //go to the next child node
-    return pear;
-}
-*/
-
-template <class T>
-void btree<T>::inOrder()
-{
-    if (root!=nullptr) {
-        root->inOrder();
-        std::cout << "\n";
-    }
-}
-
-template <class T>
-void btree<T>::split(node<T>* current){//current becomes left node!
-
     if (BUMBLEBEE) {
-        std::cout << "in split (begin), current has " << current->keys.size() <<
-                     " keys, " << current->childs.size() << " childs\n";
+        std::cout << "in split (begin), current has " << current->getNumKeys() <<
+                     " keys, " << current->getNumChilds() << " childs\n";
     }
-    node<T>* right = new node<T>(degree);//make right node
-    right->parent = current->parent;//set right's parent
-    int median = (current->keys.size() - 1) / 2;
-    std::pair<int,T> medianKey = current->keys[median];
-    unsigned int j = median+1;
-    for (; j< current->keys.size(); j++) {//add right keys and children from current to right node
-
-
-
-
-
-
-        right->addKey(current->keys[j]);
-        right->addChild(current->childs[j]); //do a set child instead
-
-
-
-
-
-
+    node<T>* right = new node<T>(degree);//make right node, creates 2 nullptrs
+    right->setParent(current->getParent());//set right parent
+    int median = (current->getNumKeys() - 1) / 2;
+    std::pair<unsigned int,T> medianKey = current->getPair(median);
+    unsigned int j = median + 1;
+    for (; j< current->getNumKeys(); j++) {//add right keys and children from current to right node
+        std::pair<unsigned int,T> sp = current->getPair(j);
+        right->addKey(sp);
+        if (right->getNumChilds()>0) { //if there are children, add them
+            right->addChild(current->getChild(j));
+        }
     }
-    right->addChild(current->childs[j]);//add last child
+    if (right->getNumChilds()>0) { //if there are children, add last child
+        right->addChild(current->getChild(j));
+    }
 
     //int toRemove = current->keys.size() / 2 + 1;//how many keys to remove from current
-    unsigned int k = median-1;
-    for (; k <= current->keys.size(); k++) {
-        if (LADYBUG) std::cout << "popped index " << k << ": " << current->keys[k].second << "\n";
-        current->keys.pop_back();
-        current->childs.pop_back();
+    unsigned int k = median+1;
+    for (; k <= current->getNumKeys(); k++) {
+        if (LADYBUG) {
+            std::cout << "popped index " << k << ": " << current->getPair(k).second << "\n";
+        }
+        current->removeKey(current->getNumKeys()); //remove last key
+        if (right->getNumChilds()>0) { //if there are children, remove them
+            current->removeChild(current->getNumChilds()-1);
+        }
     } //do not need to remove last child here
-if (LADYBUG) std::cout << "in split, current has " << current->keys.size() << " keys, " << current->childs.size() << " childs\n";
-
+    if (LADYBUG) {
+        std::cout << "in split, current has " << current->getNumKeys() << " keys, " <<
+                     current->getNumChilds() << " childs\n";
+    }
     /*for (int i=0; i < toRemove; i++){//remove keys and children from current
         current->keys.pop_back();
         current->childs.pop_back();
@@ -237,53 +86,108 @@ if (LADYBUG) std::cout << "in split, current has " << current->keys.size() << " 
     std::cout << "in split, right has " << right->childs.size() << " childs\n";*/
 
     if (current == root) {//if we're at the root, we have to make a new node and split into that
-        if (current->parent != nullptr) printf("Root's parent is not nullptr!\n");
+        if (current->getParent() != nullptr) printf("Root's parent is not nullptr!\n");
         //current->parent = new node<T>(degree,medianKey);//make new root
         //current->parent->addChild(current);//add current child (i.e. left)
         //current->parent->addChild(right);//add right child
         node<T> *nr=new node<T>(degree,medianKey);
         root=nr;
-        root->childs[0]=current; //constructor given standard pair creates nullptrs in index 0 & 1
-        root->childs[1]=right;
-        root->setLeaf(false);
-
-        node<T>* lft=root->childs[0];
+        root->addChild(current);
+        root->addChild(right);
+        //removed set leaf, node isLeaf() function checks this for us
+        node<T> *lft = root->getChild(0); //replaces: node<T>* lft=root->childs[0];
         if (LADYBUG) std::cout << "   left now has: ";
-        for (unsigned int m=0; m<lft->keys.size(); m++) {
-            std::cout << lft->keys[m].second << " ";
+        for (unsigned int m=0; m<lft->getNumKeys(); m++) {
+            std::cout << lft->getPair(m).second << " ";
         }
         if (LADYBUG) std::cout << "\n";
-        node<T>* rght=root->childs[1];
+        node<T>* rght=root->getChild(1);
         if (LADYBUG) std::cout << "   right now has: ";
-        for (unsigned int m=0; m<rght->keys.size(); m++) {
-           if (LADYBUG) std::cout << rght->keys[m].second << " ";
+        for (unsigned int m=0; m<rght->getNumKeys(); m++) {
+           if (LADYBUG) std::cout << rght->getPair(m).second << " ";
         }
         if (LADYBUG) std::cout << "\n";
 
 
     } else {
-        current->parent->setLeaf(false);
-        int idxToInsert = current->parent->getIndex(medianKey.first);//get index to insert key in parent
-        current->parent->insertKey(medianKey,idxToInsert);//insert key into parent
-
+        //current->parent->setLeaf(false);
+        unsigned int idxToInsert = current->getParent()->getIndex(medianKey.first);//get index to insert key in parent
+        current->getParent()->insertKey(medianKey,idxToInsert);//insert key into parent
         //child ptr to the left of the new key is the same as before so we don't need to do anything there
 
         //insert right ptr into correct position in parent (idxToInsert + 1)
-        current->parent->insertChild(right,idxToInsert + 1);
-
-        if (current->parent->getNumKeys() > current->parent->getMaxKeys()) {//if the parent is full, we split the parent
-            split(current->parent);
+        current->getParent()->insertChild(right,idxToInsert + 1); //insert child in parent
+        //if the parent is full, we split the parent
+        if (current->getParent()->getNumKeys() > current->getParent()->getMaxKeys()) {
+            split(current->getParent());
         }
     }
 }
-/*
+
 template <class T>
-bool btree<T>::search(int k)
+void btree<T>::breadthFirst()
 {
-    bool found=false;
-    if (root!=nullptr) {
-        found=root->search(k);
+    if (root==nullptr) return;
+    std::queue<node<T>*> qu; //create queue & push root
+    qu.push(root);
+    std::cout << " | ";
+    while (!qu.empty()) { //print items at front of queue & push root
+        node<T> *nd = qu.front();
+        unsigned int i=0;
+        for (; i<nd->getNumKeys(); i++) {
+            std::cout << nd->getPair(i).second << " ";
+        }
+        std::cout << " | ";
+        qu.pop();
+        for (i=0; i<nd->getNumChilds(); i++) {
+            if (nd->getChild(i) != nullptr) {
+                qu.push(nd->getChild(i));
+            }
+        }
     }
-    return found;
+    std::cout << "\n";
 }
-*/
+
+//NEEDS WORK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+template <class T>
+void btree<T>::inOrder()
+{
+    if (root!=nullptr) {
+        root->inOrder();
+        std::cout << "\n";
+    }
+}
+
+template <class T>
+std::pair<bool,T> btree<T>::search(unsigned int keyValue)
+{
+    if (root!=nullptr) {
+        return search(root, keyValue);
+    } else {
+        return std::make_pair<bool,T>(false,T()); //return false & default T if no root
+    }
+}
+
+template <class T>
+std::pair<bool,T> btree<T>::search(node<T>* nd, unsigned int keyValue)
+{
+    if (nd==nullptr) {
+        return std::make_pair<bool,T>(false, T());
+    }
+    unsigned int idx = nd->getIndex(keyValue); //get closest index to key value
+    if (idx <= nd->getNumKeys) { //check size so no seg fault
+        if (keyValue == nd->getKey(idx)) { //return pair if key matches
+            std::pair<bool,T> pear;
+            pear.first = true;
+            pear.second = nd[idx];
+            return pear;
+        } else { //traverse down appropriate node
+            return search(nd->getChild(idx), keyValue);
+        }
+    } else { // idx > nd->getNumKeys
+        if (BUMBLEBEE) {
+            std::cout << "in search, getindex stepped out of bounds\n";
+        }
+        return std::make_pair<bool,T>(false,T());
+    }
+}

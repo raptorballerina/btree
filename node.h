@@ -19,8 +19,12 @@ public:
     unsigned int getNumKeys(){return keys.size();}
     unsigned int getNumChilds(){return childs.size();}
     node<T>* getParent(){return parent;}
-    bool isLeaf(){return leaf;} //returns true if no children
+    bool isLeaf(){return childs.size()==0;} //returns true if no children
     unsigned int getIndex(unsigned int keyValue); //returns closest index based on key
+    int getKey(unsigned int index); //returns key at index, -1 if out of bounds
+    std::pair<unsigned int,T> getPair(unsigned int index);
+    node<T>* getChild(unsigned int index); //returns node pointer at index
+
     T getData(unsigned int keyValue); //returns data from key
     node<T>* getNode(std::pair<unsigned int, T> &pear); //returns node from standard pair
     node<T>* getNode(unsigned int keyValue); //returns node from key
@@ -31,8 +35,8 @@ public:
         //bool deleteKey(unsigned int keyValue);
     int search(unsigned int keyValue);
 
-
-    bool removeChild(unsigned int childIndex);
+    bool removeKey(unsigned int index);
+    bool removeChild(unsigned int index);
     void addKey(std::pair<unsigned int,T> &pear);
     void addChild(node* child);
     void insertKey(std::pair<unsigned int,T>pear,unsigned int i){keys.insert(keys.begin()+i,pear);}
@@ -45,13 +49,11 @@ public:
     void inOrder();
 	//properties:
 
-
-
-
 	//overloads:
-    template <class U>
-        friend std::ostream& operator<< (std::ostream &out, node<T> &nd); //prints data values in node
-    T operator[] (unsigned int index); //returns data value from index
+    template <class U> //prints data values in node
+        friend std::ostream& operator<< (std::ostream &out, node<T> &nd);
+    std::pair<unsigned int,T>& operator[] (unsigned int index); //returns pair from index
+
 private:
 
     //properties:
