@@ -1,6 +1,6 @@
 #include "btree.h"
 
-bool BUMBLEBEE=false; //set to true for debug statements
+bool BUMBLEBEE=true; //set to true for debug statements
 
 template <class T>
 void btree<T>::insert(std::pair<unsigned int,T> &pear)
@@ -85,7 +85,7 @@ void btree<T>::split(node<T>* current)//current becomes left node!
     std::cout << "in split, right has " << right->childs.size() << " childs\n";*/
 
     if (current == root) {//if we're at the root, we have to make a new node and split into that
-        if (current->getParent() != nullptr) printf("Root's parent is not nullptr!\n");
+	    if (current->getParent() != nullptr) printf("Root's parent is not nullptr!\n");
         //current->parent = new node<T>(degree,medianKey);//make new root
         //current->parent->addChild(current);//add current child (i.e. left)
         //current->parent->addChild(right);//add right child
@@ -94,7 +94,7 @@ void btree<T>::split(node<T>* current)//current becomes left node!
         root->addChild(current);
         root->addChild(right);
         //removed set leaf, node isLeaf() function checks this for us
-        node<T> *lft = root->getChild(0); //replaces: node<T>* lft=root->childs[0];
+        /*node<T> *lft = root->getChild(0); //replaces: node<T>* lft=root->childs[0];
         if (BUMBLEBEE) {
             std::cout << "   left now has: ";
             for (unsigned int m=0; m<lft->getNumKeys(); m++) {
@@ -107,8 +107,10 @@ void btree<T>::split(node<T>* current)//current becomes left node!
         for (unsigned int m=0; m<rght->getNumKeys(); m++) {
            if (BUMBLEBEE) std::cout << rght->getPair(m).second << " ";
         }
-        if (BUMBLEBEE) std::cout << "\n";
-
+        if (BUMBLEBEE) std::cout << "\n";*/
+		//set roots for left and right
+		current->setParent(root);
+		right->setParent(root);
 
     } else {
         //current->parent->setLeaf(false);
@@ -129,6 +131,7 @@ template <class T>
 void btree<T>::breadthFirst()
 {
     if (root==nullptr) return;
+    unsigned int level=0;
     std::queue<node<T>*> qu; //create queue & push root
     qu.push(root);
     std::cout << " | ";
