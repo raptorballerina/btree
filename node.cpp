@@ -267,7 +267,7 @@ std::ostream& operator<<(std::ostream &out, node<U> &nd)
 
 //returns reference to standard pair when given an index, read-only
 template <class T>
-std::pair<unsigned int,T>& node<T>::operator[](unsigned int index)
+T& node<T>::operator[](unsigned int index)
 {
     if (index>=keys.size()) { //check size first so no seg fault
         if (LADYBUG) {
@@ -275,7 +275,7 @@ std::pair<unsigned int,T>& node<T>::operator[](unsigned int index)
         }
         index = keys.size()-1;
     }
-    return keys[index];
+    return keys[index].second;
 }
 
 /*

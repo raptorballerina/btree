@@ -52,7 +52,7 @@ public:
 	//overloads:
     template <class U> //prints data values in node
         friend std::ostream& operator<< (std::ostream &out, node<T> &nd);
-    std::pair<unsigned int,T>& operator[] (unsigned int index); //returns pair from index
+    T& operator[] (unsigned int index); //returns data from index
 
 private:
 

@@ -21,6 +21,8 @@ public:
     unsigned int getDegree(){return degree;}
     void insert(std::pair<unsigned int,T> &pear);
     void split(node<T> *current);
+    //getters:
+    int getNumLevels();
     //functions:
     void breadthFirst();
     void breadthFirstLevel(int level);
