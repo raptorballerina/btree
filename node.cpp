@@ -129,13 +129,13 @@ T node<T>::getData(unsigned int keyValue)
 
 //returns node pointer to traverse down
 template <class T>
-node<T>* node<T>::getNode(std::pair<unsigned int, T> &pear)
+node<T>* node<T>::getNodeToTraverse(std::pair<unsigned int, T> &pear)
 {
     unsigned int idx=getIndexToInsert(pear.first);
     return childs[idx];
 }
 template <class T>
-node<T>* node<T>::getNode(unsigned int keyValue)
+node<T>* node<T>::getNodeToTraverse(unsigned int keyValue)
 {
     unsigned int idx=getIndexToInsert(keyValue);
     return childs[idx];

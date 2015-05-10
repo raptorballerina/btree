@@ -158,6 +158,7 @@ void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {//need special case 
                     delete root->getParent();
                     root->setParent(nullptr);
                 }
+                deleteKey(keyVal,nd->getNodeToTraverse(keyVal));
             }
         }
     }

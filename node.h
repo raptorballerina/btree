@@ -26,8 +26,8 @@ public:
     node<T>* getChild(unsigned int index); //returns node pointer at index
 
     T getData(unsigned int keyValue); //returns data from key
-    node<T>* getNode(std::pair<unsigned int, T> &pear); //returns node from standard pair
-    node<T>* getNode(unsigned int keyValue); //returns node from key
+    node<T>* getNodeToTraverse(std::pair<unsigned int, T> &pear); //returns node from standard pair
+    node<T>* getNodeToTraverse(unsigned int keyValue); //returns node from key
     //setters:
     void setParent(node<T> *nd){parent=nd;}
     //functions:
