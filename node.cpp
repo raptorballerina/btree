@@ -49,14 +49,14 @@ node<T>::node(unsigned int dgree, const std::pair<unsigned int, T> &pear, node<T
 }
 
 template <class T>
-void node<T>::addChild(node* child)
+void node<T>::addChildToBack(node* child)
 {
     childs.push_back(child);
 }
 
 //returns closest index based on key, used for insert or exists using binary search
 template <class T>
-unsigned int node<T>::getIndex(unsigned int keyValue)
+unsigned int node<T>::getIndexToInsert(unsigned int keyValue)
 {
     int lo=0;
     int hi=keys.size()-1;
@@ -77,7 +77,7 @@ unsigned int node<T>::getIndex(unsigned int keyValue)
 
 //returns key at index
 template <class T>
-int node<T>::getKey(unsigned int index)
+int node<T>::getKeyVal(unsigned int index)
 {
     if (index>=keys.size()) {
         return -1;
@@ -115,7 +115,7 @@ node<T>* node<T>::getChild(unsigned int index)
 template <class T>
 T node<T>::getData(unsigned int keyValue)
 {
-    unsigned int index=getIndex(keyValue);
+    unsigned int index=getIndexToInsert(keyValue);
     if (index>=keys.size()) { //check the size first so that it won't seg fault
         if (LADYBUG) {
             std::cout << "in getkeydata, nothing found for keyvalue " << keyValue << "\n";
@@ -134,40 +134,21 @@ T node<T>::getData(unsigned int keyValue)
 template <class T>
 node<T>* node<T>::getNode(std::pair<unsigned int, T> &pear)
 {
-    unsigned int idx=getIndex(pear.first);
+    unsigned int idx=getIndexToInsert(pear.first);
     return childs[idx];
 }
 template <class T>
 node<T>* node<T>::getNode(unsigned int keyValue)
 {
-    unsigned int idx=getIndex(keyValue);
+    unsigned int idx=getIndexToInsert(keyValue);
     return childs[idx];
 }
 
-/*
-template <class T>
-bool node<T>::deleteKey(unsigned int keyValue)
-{
-    int idx=getIndex(keyValue);
-    //getindex returns keys.size when value greater than all keys
-    if (idx==keys.size()) {
-        if (LADYBUG) {
-            std::cout << "Key " << keyValue << " does not exist, delete canceled\n";
-        }
-        return false;
-    }
-    if (keyValue==keys[idx].first) {
-        keys.erase(keys.begin()+idx);
-        return true;
-    }
-    return false;
-}
-*/
 //search by key value, return index if found, or -1 if not found
 template <class T>
 int node<T>::searchNode(unsigned int keyValue)
 {
-    unsigned int index = getIndex(keyValue);
+    unsigned int index = getIndexToInsert(keyValue);
     if (index >= keys.size()) { //check size so no seg fault
         if (LADYBUG) {
             std::cout << "in node.search, index " << index << " out of bounds\n";
@@ -212,7 +193,7 @@ bool node<T>::removeChild(unsigned int index)
 template <class T>
 void node<T>::insert(const std::pair<unsigned int, T> &pear,node<T>* childPtr)
 {
-    unsigned int index = getIndex(pear.first);
+    unsigned int index = getIndexToInsert(pear.first);
     keys.insert(keys.begin()+index, pear);
     if (index!=0) { //if insert index > 0, ptr goes to right of key, otherwise left
         index++;
@@ -229,11 +210,17 @@ void node<T>::insert(const std::pair<unsigned int, T> &pear,node<T>* childPtr)
 }
 
 template <class T>
-void node<T>::addKey(std::pair<unsigned int,T> &pear) {
+void node<T>::insertKeyIntoNode(const std::pair<unsigned int, T> &pear){
+    unsigned int index = getIndexToInsert(pear.first);
+    insertKeyAtIndex(pear,index);
+}
+
+template <class T>
+void node<T>::addKeyToBack(std::pair<unsigned int,T> &pear) {
     keys.push_back(pear); //add pair to key vector
 }
 template <class T>
-void node<T>::insertChild(node* child, unsigned int i)
+void node<T>::insertChildIntoNode(node* child, unsigned int i)
 {
     childs.insert(childs.begin()+i, child);
 }
