@@ -141,6 +141,25 @@ node<T>* node<T>::getNode(unsigned int keyValue)
     return childs[idx];
 }
 
+/*
+template <class T>
+bool node<T>::deleteKey(unsigned int keyValue)
+{
+    int idx=getIndex(keyValue);
+    //getindex returns keys.size when value greater than all keys
+    if (idx==keys.size()) {
+        if (LADYBUG) {
+            std::cout << "Key " << keyValue << " does not exist, delete canceled\n";
+        }
+        return false;
+    }
+    if (keyValue==keys[idx].first) {
+        keys.erase(keys.begin()+idx);
+        return true;
+    }
+    return false;
+}
+*/
 //search by key value, return index if found, or -1 if not found
 template <class T>
 int node<T>::searchNode(unsigned int keyValue)
@@ -197,6 +216,7 @@ void node<T>::insert(const std::pair<unsigned int, T> &pear,node<T>* childPtr)
     }
     childs.insert(childs.begin()+index, childPtr);
     if (keys.size()==1 && childs.size()==1) { //node empty to begin with, check pointers
+        childs.push_back(nullptr); //set right child ptr to null
         if (LADYBUG) {
             if (childPtr!=nullptr) {
                 std::cout << "inserted into empty node, set right child ptr\n";
