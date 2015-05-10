@@ -352,11 +352,11 @@ std::pair<bool,T> btree<T>::search(node<T>* nd, unsigned int keyValue)
         return std::make_pair<bool,T>(false, T());
     }
     unsigned int idx = nd->getIndexToInsert(keyValue); //get closest index to key value
-    if (idx <= nd->getNumKeys) { //check size so no seg fault
+    if (idx <= nd->getNumKeys()) { //check size so no seg fault
         if (keyValue == nd->getKeyVal(idx)) { //return pair if key matches
             std::pair<bool,T> pear;
             pear.first = true;
-            pear.second = nd[idx];
+            pear.second = nd->getPair(idx).second;
             return pear;
         } else { //traverse down appropriate node
             return search(nd->getChild(idx), keyValue);
@@ -408,7 +408,7 @@ template <class T>
 void btree<T>::writeFile(std::string textfile)
 {
     if (root!=nullptr) {
-        writeFile(root, textFile);
+        writeFile(root, textfile);
     }
 }
 
