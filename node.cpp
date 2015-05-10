@@ -9,7 +9,6 @@ node<T>::node(unsigned int dgree)
     degree=dgree; //max number of children = 2n
     maxKeys=2 * degree - 1; //max number of keys = 2n-1
     parent=nullptr; //parent pointer defaults to null
-    leaf=true; //leaf defaults to true for no children
     keys.reserve(2 * dgree); //reserve key vector size, needs to allow overflow by 1
     childs.reserve(2 * dgree); //reserve child pointer vector size
     if (LADYBUG) { std::cout << "new empty node created\n"; }
@@ -21,7 +20,6 @@ node<T>::node(unsigned int dgree, const std::pair<unsigned int, T> &pear)
     degree=dgree;
     maxKeys=2 * dgree-1;
     parent=nullptr;
-    leaf=true;
     keys.reserve(2 * dgree); //reserve key vector size, needs to allow overflow by 1
     childs.reserve(2 * dgree); //reserve child pointer vector size
     keys.push_back(pear); //insert key value into key vector
@@ -34,7 +32,6 @@ node<T>::node(unsigned int dgree, const std::pair<unsigned int, T> &pear, node<T
     degree=dgree;
     maxKeys=2 * dgree-1;
     parent=nullptr;
-    leaf=false;
     keys.reserve(2 * dgree);
     childs.reserve(2 * dgree - 1);
     keys.push_back(pear);
@@ -207,7 +204,7 @@ bool node<T>::removeChild(unsigned int index)
         return false;
     }
 }
-
+/*
 //decides where in node key value should go and adds child pointer accordingly
 template <class T>
 void node<T>::insert(const std::pair<unsigned int, T> &pear,node<T>* childPtr)
@@ -219,7 +216,6 @@ void node<T>::insert(const std::pair<unsigned int, T> &pear,node<T>* childPtr)
     }
     childs.insert(childs.begin()+index, childPtr);
     if (keys.size()==1 && childs.size()==1) { //node empty to begin with, check pointers
-        childs.push_back(nullptr); //set right child ptr to null
         if (LADYBUG) {
             if (childPtr!=nullptr) {
                 std::cout << "inserted into empty node, set right child ptr\n";
@@ -227,7 +223,7 @@ void node<T>::insert(const std::pair<unsigned int, T> &pear,node<T>* childPtr)
         }
     }
 }
-
+*/
 template <class T>
 void node<T>::addKey(std::pair<unsigned int,T> &pear) {
     keys.push_back(pear); //add pair to key vector
@@ -238,7 +234,7 @@ void node<T>::insertChild(node* child, unsigned int i)
     childs.insert(childs.begin()+i, child);
 }
 
-template <class T>
+/*template <class T>
 void node<T>::inOrder() {
     unsigned int i=0;
     for (;i<keys.size();i++) {
@@ -253,7 +249,7 @@ void node<T>::inOrder() {
     if (!leaf) {
         childs[i]->inOrder();
     }
-}
+}*/
 
 //print data values in a node
 template <class U>

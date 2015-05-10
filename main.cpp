@@ -40,8 +40,9 @@ int main(int argc, char *argv[])
     imCoveredInBees.deleteKey(11);
     imCoveredInBees.breadthFirst();
 
+    std::cout << "in order print: \n";
+    imCoveredInBees.inOrder();
     std::cout << "breadth first print: \n";
-    //imCoveredInBees.inOrder();
     imCoveredInBees.breadthFirstLevels();
 
     unsigned int k=10;

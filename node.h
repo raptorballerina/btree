@@ -45,8 +45,7 @@ public:
     void setLeaf(bool val){leaf=val;}
     void insert(unsigned int keyValue, node<T> *childPtr=nullptr);
     void setKey(unsigned int idx, std::pair<unsigned int, T> &pear){keys[idx] = pear;}
-//	bool isRoot(){return root;}
-    void inOrder();
+//void inOrder();
 	//properties:
 
 	//overloads:

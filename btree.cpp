@@ -24,7 +24,7 @@ void btree<T>::deleteKey(unsigned int keyVal) {
 
 template <class T>
 void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {
-    unsigned int idx;
+    int idx;
     if ((idx = nd->searchNode(keyVal)) != -1) {//if the key we're looking for is in current node
         if (nd->isLeaf()) {
             for (unsigned int i=0; i<nd->getNumKeys(); i++) {
@@ -135,7 +135,7 @@ void btree<T>::split(node<T>* current)//current becomes left node!
         right->addChild(current->getChild(j));
     }
     //int toRemove = current->keys.size() / 2 + 1;//how many keys to remove from current
-    unsigned int k = current->getNumKeys() - 1;
+    int k = current->getNumKeys() - 1;
     for (; k>=median; k--) {
         if (BUMBLEBEE) {
             std::cout << "popped index " << k << ": " << current->getPair(k).second << "\n";
@@ -269,14 +269,33 @@ void btree<T>::breadthFirstLevels()
     }
 }
 
-//NEEDS WORK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 template <class T>
 void btree<T>::inOrder()
 {
     if (root!=nullptr) {
-        root->inOrder();
+        inOrder(root);
         std::cout << "\n";
     }
+}
+
+template <class T>
+void btree<T>::inOrder(node<T>* nd)
+{
+    if (nd==nullptr) {
+        if (BUMBLEBEE) {
+            std::cout << "in inorder, nullptr found in child node\n";
+        }
+        return;
+    }
+    bool leaf = nd->isLeaf();
+    unsigned int i=0;
+    for (; i<nd->getNumKeys(); i++) {
+        if (!leaf) {
+            inOrder(nd->getChild(i));
+        }
+        std::cout << nd->getPair(i).second << " ";
+    }
+    inOrder(nd->getChild(i));
 }
 
 template <class T>
@@ -297,7 +316,7 @@ std::pair<bool,T> btree<T>::search(node<T>* nd, unsigned int keyValue)
     }
     unsigned int idx = nd->getIndex(keyValue); //get closest index to key value
     if (idx <= nd->getNumKeys()) { //check size so no seg fault
-        if (keyValue == nd->getKey(idx)) { //return pair if key matches
+        if (keyValue == (unsigned int)nd->getKey(idx)) { //return pair if key matches
             std::pair<bool,T> pear;
             pear.first = true;
             pear.second = nd->getPair(idx).second; //replaced: pear.second = nd[idx]
