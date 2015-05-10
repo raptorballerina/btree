@@ -219,7 +219,6 @@ void btree<T>::split(node<T>* current)//current becomes left node!
     if (current->getNumChilds()>0) { //if there are children, add last child
         right->addChildToBack(current->getChild(j));
     }
-    //int toRemove = current->keys.size() / 2 + 1;//how many keys to remove from current
     unsigned int k = current->getNumKeys() - 1;
     for (; k>=median; k--) {
         if (BUMBLEBEE) {
