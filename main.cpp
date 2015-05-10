@@ -61,6 +61,9 @@ int main(int argc, char *argv[])
     std::cout << "breadth first print:\n";
     beetree.breadthFirstLevels();
 
+    std::cout << "\nand then there was this...\n";
+    beetree.writeFile("./out.txt");
+
     return a.exec();
     //return 0;
 }

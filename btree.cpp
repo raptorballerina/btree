@@ -111,10 +111,8 @@ void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {//need special case 
 
                 }
             }
-
         }
     }
-
 }
 
 template <class T>
@@ -412,17 +410,22 @@ void btree<T>::writeFile(std::string textfile)
     }
 }
 
+//NEEDS WORK!!!!!! ONLY PRINTING LAST ITEMS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 template <class T>
-void btree<T>::writeFile(node<T>* nd, std::string textFile)
+void btree<T>::writeFile(node<T>* nd, std::string textfile)
 {
     if (nd==nullptr) {
         return;
     }
     bool leaf = nd->isLeaf();
     unsigned int i=0;
+    std::ofstream outfile(textfile,std::ios::out); //file to write to
     for (; i<nd->getNumKeys(); i++) { //print data values in node
-        if (!leaf) inOrder(nd->getChild(i)); //run in order on child pointer if not leaf
-        std::cout << nd->getPair(i).second << " "; //print data value
+        if (!leaf) {
+            writeFile(nd->getChild(i),textfile); //run in order on child pointer if not leaf
+        }
+        //std::cout << nd->getPair(i).second << " "; //print data value
+        outfile << nd->getPair(i).first << " " << nd->getPair(i).second << std::endl;
     }
-    if (!leaf) inOrder(nd->getChild(i)); //in order on last child pointer if not leaf
+    if (!leaf) writeFile(nd->getChild(i),textfile); //in order on last child pointer if not leaf
 }
