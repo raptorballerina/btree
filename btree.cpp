@@ -66,6 +66,12 @@ void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {//need special case 
                 nd->removeChild(idx+1);
                 delete rightChild;
                 deleteKey(keyVal,leftChild);
+                if(nd == root && nd->getNumKeys() == 0) {
+                    //nd is the root and has no keys, we make its child the new root
+                    root = root->getChild(0);
+                    delete root->getParent();
+                    root->setParent(nullptr);
+                }
             }
         }
     } else {//if the key we want to delete is not in the current node
@@ -78,7 +84,7 @@ void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {//need special case 
              *child, move a key from the left/right sibling into nd, and move the correct
              *child ptr from the left or right into child */
 
-            if ((idxToTraverse > 0) && (nd->getChild(idxToTraverse-1) != nullptr)
+            if ((nd->getChild(idxToTraverse-1) != nullptr)
                     && (nd->getChild(idxToTraverse-1)->getNumKeys() >= degree)) {
                 node<T>* leftSibling = nd->getChild(idxToTraverse-1);
                 //move key at idxToTraverse in nd to child
@@ -88,9 +94,9 @@ void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {//need special case 
                 child->insertKeyIntoNode(leftSibling->getPair(leftSibling->getNumKeys() - 1));
                 leftSibling->removeKey(leftSibling->getNumKeys()-1);
                 //move child ptr from lef-t sibling into child
-                child->insertChildIntoNode(leftSibling->getChild(leftSibling->getNumChilds()-1),0);
+                child->InsertChildAtIndex(leftSibling->getChild(leftSibling->getNumChilds()-1),0);
                 leftSibling->removeChild(leftSibling->getNumChilds()-1);
-            } else if ((idxToTraverse < nd->getNumKeys()-1) && (nd->getChild(idxToTraverse+1) != nullptr)
+            } else if ((nd->getChild(idxToTraverse+1) != nullptr)
                        && (nd->getChild(idxToTraverse+1)->getNumKeys() >= degree)){
                 node<T>* rightSibling = nd->getChild(idxToTraverse+1)   ;
                 //move key at idxToTraverse in nd to child
@@ -106,9 +112,51 @@ void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {//need special case 
                 /*child and its siblings all have t-1 keys
                  *we merge child w/ one of its siblings
                  *this "involves" moving a key from x into the merged node as new median */
-                if (idxToTraverse > 0 && nd->getChild(idxToTraverse-1) != nullptr) {
-                    //merge w/ left
-
+                if (nd->getChild(idxToTraverse-1) != nullptr) {
+                    node<T>* leftSibling = nd->getChild(idxToTraverse-1);
+                    //merge child w/ left:
+                    //move key in nd between left and child ptrs to back of left as new median
+                    //passing by reference so we need to do the thing here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    std::pair<unsigned int, T> tempPair = nd->getPair(idxToTraverse-1);
+                    leftSibling->addKeyToBack(tempPair);
+                    nd->removeKey(idxToTraverse-1);
+                    //move all keys and children in child to left
+                    int childNumPtrs = child->getNumChilds();
+                    int childNumKeys = child->getNumKeys();
+                    for (int i=0; i < childNumPtrs;i++) {
+                        leftSibling->addChildToBack(child->getChild(i));
+                    }
+                    for (int i=0; i < childNumKeys; i++) {
+                        tempPair = child->getPair(i);
+                        leftSibling->addKeyToBack(tempPair);
+                    }
+                    //delete child node and remove ptr to child from nd
+                   delete child;
+                    nd->removeChild(idxToTraverse);
+                } else if (nd->getChild(idxToTraverse+1) != nullptr){
+                    node<T>* rightSibling = nd->getChild(idxToTraverse+1);
+                    //merge child w/ right:
+                    //move key in nd between child and right ptrs to front of right as new median
+                    rightSibling->insertKeyIntoNode(nd->getPair(idxToTraverse));
+                    nd->removeKey(idxToTraverse);
+                    //move all keys and children in child to front of right
+                    int childNumPtrs = child->getNumChilds();
+                    int childNumKeys = child->getNumKeys();
+                    for (int i=0; i < childNumPtrs; i++){
+                        rightSibling->InsertChildAtIndex(child->getChild(childNumPtrs-1-i),0);
+                    }
+                    for (int i=0; i < childNumKeys; i++){
+                        rightSibling->insertKeyAtIndex(child->getPair(childNumKeys-1-i),0);
+                    }
+                    //delete child node and remove ptr to child from nd
+                    delete child;
+                    nd->removeChild(idxToTraverse);
+                }
+                if(nd == root && nd->getNumKeys() == 0) {
+                    //nd is the root and has no keys, we make its child the new root
+                    root = root->getChild(0);
+                    delete root->getParent();
+                    root->setParent(nullptr);
                 }
             }
         }
@@ -232,7 +280,7 @@ void btree<T>::split(node<T>* current)//current becomes left node!
         //child ptr to the left of the new key is the same as before so we don't need to do anything there
 
         //insert right ptr into correct position in parent (idxToInsert + 1)
-        current->getParent()->insertChildIntoNode(right,idxToInsert + 1); //insert child in parent
+        current->getParent()->InsertChildAtIndex(right,idxToInsert + 1); //insert child in parent
         //if the parent is full, we split the parent
         if (current->getParent()->getNumKeys() > current->getParent()->getMaxKeys()) {
             split(current->getParent());

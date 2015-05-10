@@ -236,7 +236,7 @@ void node<T>::addKeyToBack(std::pair<unsigned int,T> &pear) {
     keys.push_back(pear); //add pair to key vector
 }
 template <class T>
-void node<T>::insertChildIntoNode(node* child, unsigned int i)
+void node<T>::InsertChildAtIndex(node* child, unsigned int i)
 {
     childs.insert(childs.begin()+i, child);
 }
