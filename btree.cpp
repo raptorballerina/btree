@@ -116,7 +116,6 @@ void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {//need special case 
                     node<T>* leftSibling = nd->getChild(idxToTraverse-1);
                     //merge child w/ left:
                     //move key in nd between left and child ptrs to back of left as new median
-                    //passing by reference so we need to do the thing here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     std::pair<unsigned int, T> tempPair = nd->getPair(idxToTraverse-1);
                     leftSibling->addKeyToBack(tempPair);
                     nd->removeKey(idxToTraverse-1);
@@ -235,41 +234,13 @@ void btree<T>::split(node<T>* current)//current becomes left node!
         std::cout << "in split, current has " << current->getNumKeys() << " keys, " <<
                      current->getNumChilds() << " childs\n";
     }
-    /*for (int i=0; i < toRemove; i++){//remove keys and children from current
-        current->keys.pop_back();
-        current->childs.pop_back();
-    }//do not need to remove last child here*/
-
-    /*std::cout << "in split, current has " << current->keys.size() << " keys\n";
-    std::cout << "in split, current has " << current->childs.size() << " childs\n";
-
-    std::cout << "in split, right has " << right->keys.size() << " keys\n";
-    std::cout << "in split, right has " << right->childs.size() << " childs\n";*/
 
     if (current == root) {//if we're at the root, we have to make a new node and split into that
-	    if (current->getParent() != nullptr) printf("Root's parent is not nullptr!\n");
-        //current->parent = new node<T>(degree,medianKey);//make new root
-        //current->parent->addChild(current);//add current child (i.e. left)
-        //current->parent->addChild(right);//add right child
+        if (current->getParent() != nullptr) printf("Root's parent is not nullptr!\n");
         node<T> *nr=new node<T>(degree,medianKey);
         root=nr;
         root->addChildToBack(current);
         root->addChildToBack(right);
-        //removed set leaf, node isLeaf() function checks this for us
-        /*node<T> *lft = root->getChild(0); //replaces: node<T>* lft=root->childs[0];
-        if (BUMBLEBEE) {
-            std::cout << "   left now has: ";
-            for (unsigned int m=0; m<lft->getNumKeys(); m++) {
-                std::cout << lft->getPair(m).second << " ";
-            }
-            std::cout << "\n";
-        }
-        node<T>* rght=root->getChild(1);
-        if (BUMBLEBEE) std::cout << "   right now has: ";
-        for (unsigned int m=0; m<rght->getNumKeys(); m++) {
-           if (BUMBLEBEE) std::cout << rght->getPair(m).second << " ";
-        }
-        if (BUMBLEBEE) std::cout << "\n";*/
 		//set roots for left and right
 		current->setParent(root);
 		right->setParent(root);
