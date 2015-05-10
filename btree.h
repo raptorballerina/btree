@@ -21,9 +21,13 @@ public:
     unsigned int getDegree(){return degree;}
     void insert(std::pair<unsigned int,T> &pear);
     void split(node<T> *current);
+    //getters:
+    int getNumLevels();
     //functions:
-    void breadthFirst();
     void inOrder();
+    void breadthFirst();
+    void breadthFirstLevel(int level);
+    void breadthFirstLevels(); //for testing purposes only, horribly inefficient
     std::pair<bool,T> search(unsigned int keyValue);
     void deleteKey(unsigned int keyVal);
 private:
@@ -32,6 +36,7 @@ private:
     unsigned int degree;
     //functions:
     std::pair<bool,T> search(node<T> *nd, unsigned int keyValue); //recursive search
+    void inOrder(node<T>* nd); //recursive print
     void deleteKey(unsigned int keyVal, node<T>* nd);
 };
 
