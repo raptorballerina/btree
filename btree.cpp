@@ -1,4 +1,6 @@
 #include "btree.h"
+#include <fstream> //ifstream
+#include <sstream> //stringstream
 
 bool BUMBLEBEE=true; //set to true for debug statements
 
@@ -365,4 +367,62 @@ std::pair<bool,T> btree<T>::search(node<T>* nd, unsigned int keyValue)
         }
         return std::make_pair<bool,T>(false,T());
     }
+}
+
+template <class T>
+void btree<T>::readIn(std::string textfile)
+{
+    std::ifstream inputfile(textfile); //read file
+    std::pair<unsigned int,std::string> sp; //variable to insert into tree
+
+    if (inputfile.is_open()) {
+        //while(inputfile.good()) {
+        while (inputfile >> sp.first >> sp.second) {
+            //std::getline(inputfile,line); //put line into variable
+            //inputfile >> sp.first >> sp.second; //set standard pair variables
+            insert(sp); //add standard pair to btree
+        }
+    }
+}
+
+/*template <class T>
+void btree<T>::writeFile(std::string textfile)
+{
+    if (root==nullptr) return;
+    int level = getNumLevels();
+    int i = level; //decrement this
+    std::ofstream outfile(textfile,std::ios::out); //file to write to
+    node<T>* nd = root;
+
+
+
+    //stuff to do
+    outfile << sp.first << sp.second << std::endl;
+
+    //do this at the end
+    outfile.close();
+}*/
+
+//in order print: <key> <data value>
+template <class T>
+void btree<T>::writeFile(std::string textfile)
+{
+    if (root!=nullptr) {
+        writeFile(root, textFile);
+    }
+}
+
+template <class T>
+void btree<T>::writeFile(node<T>* nd, std::string textFile)
+{
+    if (nd==nullptr) {
+        return;
+    }
+    bool leaf = nd->isLeaf();
+    unsigned int i=0;
+    for (; i<nd->getNumKeys(); i++) { //print data values in node
+        if (!leaf) inOrder(nd->getChild(i)); //run in order on child pointer if not leaf
+        std::cout << nd->getPair(i).second << " "; //print data value
+    }
+    if (!leaf) inOrder(nd->getChild(i)); //in order on last child pointer if not leaf
 }

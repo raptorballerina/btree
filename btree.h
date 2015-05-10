@@ -2,6 +2,7 @@
 #define BTREE_H_
 #include "node.h"
 #include <iostream>
+#include <string>
 #include <vector>
 #include <queue>
 
@@ -30,6 +31,9 @@ public:
     void breadthFirstLevels(); //for testing purposes only, horribly inefficient
     std::pair<bool,T> search(unsigned int keyValue);
     void deleteKey(unsigned int keyVal);
+    void readIn(std::string textfile);
+    void writeFile(std::string textfile);
+    void writeFile(node<T> *nd,std::string textfile);
 private:
     //properties:
     node<T> *root;

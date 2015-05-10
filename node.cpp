@@ -241,23 +241,6 @@ void node<T>::insertChildIntoNode(node* child, unsigned int i)
     childs.insert(childs.begin()+i, child);
 }
 
-/*template <class T>
-void node<T>::inOrder() {
-    unsigned int i=0;
-    for (;i<keys.size();i++) {
-        if (!leaf) {
-            if (LADYBUG) std::cout << "going down at " << keys[i].second << std::endl;
-            childs[i]->inOrder();
-        } else {
-            if (LADYBUG) std::cout << "leaf at " << keys[i].second << std::endl;
-        }
-        std::cout << keys[i].second << " ";
-    }
-    if (!leaf) {
-        childs[i]->inOrder();
-    }
-}*/
-
 //print data values in a node
 template <class U>
 std::ostream& operator<<(std::ostream &out, node<U> &nd)
@@ -280,15 +263,3 @@ T& node<T>::operator[](unsigned int index)
     }
     return keys[index].second;
 }
-
-/*
-template <class T>
-T heap<T>::operator[](int index)
-{
-    if (index < this->currentSize) {
-        return this->array[index].second;
-    } else {
-        return this->array[currentSize-1].second;
-    }
-}
-*/

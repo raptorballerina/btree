@@ -45,13 +45,8 @@ public:
     void setLeaf(bool val){leaf=val;}
     void insert(unsigned int keyValue, node<T> *childPtr=nullptr);
     void setKey(unsigned int idx, std::pair<unsigned int, T> &pear){keys[idx] = pear;}
-//	bool isRoot(){return root;}
-    void inOrder();
-
     void insertKeyIntoNode(const std::pair<unsigned int, T> &pear);
-
 	//properties:
-
 	//overloads:
     template <class U> //prints data values in node
         friend std::ostream& operator<< (std::ostream &out, node<T> &nd);

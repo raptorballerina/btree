@@ -51,6 +51,15 @@ int main(int argc, char *argv[])
     if (k==sp.first) {
         std::cout << "key " << sp.first << " found with value " << sp.second << "\n";
     }
+    
+    //create new btree from file
+    std::cout << "\nbtree from readin:\n";
+    btree<std::string> beetree(3);
+    beetree.readIn("./in.txt");
+    std::cout << "in order print:\n";
+    beetree.inOrder();
+    std::cout << "breadth first print:\n";
+    beetree.breadthFirstLevels();
 
     return a.exec();
     //return 0;

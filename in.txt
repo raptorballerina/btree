@@ -1,0 +1,9 @@
+5 five
+10 ten
+7 se7en
+3 three
+11 eleven
+2 two
+13 thirteen
+9 nine
+6 six
