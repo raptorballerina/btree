@@ -289,13 +289,11 @@ void btree<T>::inOrder(node<T>* nd)
     }
     bool leaf = nd->isLeaf();
     unsigned int i=0;
-    for (; i<nd->getNumKeys(); i++) {
-        if (!leaf) {
-            inOrder(nd->getChild(i));
-        }
-        std::cout << nd->getPair(i).second << " ";
+    for (; i<nd->getNumKeys(); i++) { //print data values in node
+        if (!leaf) inOrder(nd->getChild(i)); //run in order on child pointer if not leaf
+        std::cout << nd->getPair(i).second << " "; //print data value
     }
-    inOrder(nd->getChild(i));
+    if (!leaf) inOrder(nd->getChild(i)); //in order on last child pointer if not leaf
 }
 
 template <class T>
