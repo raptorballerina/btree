@@ -383,49 +383,37 @@ void btree<T>::readIn(std::string textfile)
     }
 }
 
-/*template <class T>
-void btree<T>::writeFile(std::string textfile)
-{
-    if (root==nullptr) return;
-    int level = getNumLevels();
-    int i = level; //decrement this
-    std::ofstream outfile(textfile,std::ios::out); //file to write to
-    node<T>* nd = root;
-
-
-
-    //stuff to do
-    outfile << sp.first << sp.second << std::endl;
-
-    //do this at the end
-    outfile.close();
-}*/
-
 //in order print: <key> <data value>
 template <class T>
 void btree<T>::writeFile(std::string textfile)
 {
     if (root!=nullptr) {
-        writeFile(root, textfile);
+        writeFile(root, textfile, true);
     }
 }
 
-//NEEDS WORK!!!!!! ONLY PRINTING LAST ITEMS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 template <class T>
-void btree<T>::writeFile(node<T>* nd, std::string textfile)
+void btree<T>::writeFile(node<T>* nd, std::string textfile, bool overwrite)
 {
     if (nd==nullptr) {
         return;
     }
     bool leaf = nd->isLeaf();
     unsigned int i=0;
-    std::ofstream outfile(textfile,std::ios::out); //file to write to
+    std::ofstream outfile; //file to write to
+    if (overwrite) {
+        outfile.open(textfile, std::ios::out); //overwrite the file
+    }
+    outfile.close();
+    outfile.open(textfile, std::ios::app); //append to end of file
     for (; i<nd->getNumKeys(); i++) { //print data values in node
         if (!leaf) {
-            writeFile(nd->getChild(i),textfile); //run in order on child pointer if not leaf
+            writeFile(nd->getChild(i), textfile, false); //run in order on child pointer if not leaf
         }
-        //std::cout << nd->getPair(i).second << " "; //print data value
         outfile << nd->getPair(i).first << " " << nd->getPair(i).second << std::endl;
     }
-    if (!leaf) writeFile(nd->getChild(i),textfile); //in order on last child pointer if not leaf
+    if (!leaf) {
+        writeFile(nd->getChild(i), textfile, false); //in order on last child pointer if not leaf
+    }
+    outfile.close();
 }

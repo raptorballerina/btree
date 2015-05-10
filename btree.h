@@ -33,7 +33,6 @@ public:
     void deleteKey(unsigned int keyVal);
     void readIn(std::string textfile);
     void writeFile(std::string textfile);
-    void writeFile(node<T> *nd,std::string textfile);
 private:
     //properties:
     node<T> *root;
@@ -42,6 +41,7 @@ private:
     std::pair<bool,T> search(node<T> *nd, unsigned int keyValue); //recursive search
     void inOrder(node<T>* nd); //recursive print
     void deleteKey(unsigned int keyVal, node<T>* nd);
+    void writeFile(node<T> *nd,std::string textfile,bool overwrite); //recursive write
 };
 
 #include "btree.cpp"
