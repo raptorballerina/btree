@@ -206,28 +206,14 @@ void btree<T>::split(node<T>* current)//current becomes left node!
     }
     node<T>* right = new node<T>(degree);//make right node
     right->setParent(current->getParent());//set right parent
-
-    //DEBUGGING!!!
-    if (current->getParent()!=nullptr) { std::cout << "    current's parent starts with " << current->getParent()->getKeyVal(0) << "\n"; }
-    //END DEBUG!!!
-
     int median = (current->getNumKeys() - 1) / 2;
     std::pair<unsigned int,T> medianKey = current->getPair(median);
     unsigned int j = median + 1;
     for (; j< current->getNumKeys(); j++) {//add right keys and children from current to right node
         std::pair<unsigned int,T> sp = current->getPair(j);
         right->addKeyToBack(sp);
-
-        //DEBUGGING!!!
-        std::cout << "    pushing key " << sp.first << " to new right node\n";
-        //END DEBUG!!!
-
         if (current->getNumChilds()>0) { //if there are children, add them
             right->addChildToBack(current->getChild(j));
-
-            //DEBUGGING!!!
-            std::cout << "    pushing child node " << j << " to new right node\n";
-            //END DEBUG!!!
         }
     }
     if (current->getNumChilds()>0) { //if there are children, add last child
@@ -244,19 +230,11 @@ void btree<T>::split(node<T>* current)//current becomes left node!
             std::cout << "popped index " << k << ": " << current->getPair(k).second << "\n";
         }
 
-        //DEBUGGING!!!
-        std::cout << "    removing key " << current->getPair(k).second << " at index " << k << " from current node\n";
-        //END DEBUG!!!
-
         current->removeKey(k);
 
         if (current->getNumChilds()>0) { //if there are children, remove them
             current->removeChild(k+1);
         }
-
-        //DEBUGGING!!!
-        std::cout << "    removing child node " << k+1 << " from current node\n";
-        //END DEBUG!!!
 
     } //do not need to remove last child here
     if (BUMBLEBEE) {
@@ -276,11 +254,6 @@ void btree<T>::split(node<T>* current)//current becomes left node!
 
     } else {
         unsigned int idxToInsert = current->getParent()->getIndexToInsert(medianKey.first);//get index to insert key in parent
-
-        //DEBUGGING!!!
-        std::cout << "    inserting new root " << medianKey.first << " into index " << idxToInsert << " of parent node\n";
-        std::cout << "    parent node starts with " << current->getParent()->getKeyVal(0) << "\n";
-        //END DEBUG!!!
 
         current->getParent()->insertKeyAtIndex(medianKey,idxToInsert);//insert key into parent
         //child ptr to the left of the new key is the same as before so we don't need to do anything there
@@ -333,13 +306,6 @@ void btree<T>::breadthFirstLevel(int level)
         std::pair<node<T>*,int> sp = qu.front();
         unsigned int i=0; //iterator
         if (sp.second==level) { //only print if levels match
-            int illmatic;
-            if (sp.first->getParent()==nullptr) {
-                illmatic=0;
-            } else {
-                illmatic=sp.first->getParent()->getKeyVal(0);
-            }
-            std::cout << "(" << illmatic << ") ";
             for (; i<sp.first->getNumKeys(); i++) {
                 std::cout << sp.first->getPair(i).second << " ";
             }
