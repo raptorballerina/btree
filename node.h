@@ -39,8 +39,8 @@ public:
     bool removeChild(unsigned int index);
     void addKeyToBack(std::pair<unsigned int,T> &pear);
     void addChildToBack(node* child);
-    void insertKeyAtIndex(std::pair<unsigned int,T>pear,unsigned int i){keys.insert(keys.begin()+i,pear);}
-    void InsertChildAtIndex(node* child, unsigned int i);
+    void insertKeyAtIndex(std::pair<unsigned int,T>pear,unsigned int i);
+    void insertChildAtIndex(node* child, unsigned int i);
     void setChild(node* child, unsigned int index){childs[index] = child;}
     void setLeaf(bool val){leaf=val;}
     void insert(unsigned int keyValue, node<T> *childPtr=nullptr);

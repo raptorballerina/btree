@@ -2,7 +2,7 @@
 #include <fstream> //ifstream
 #include <sstream> //stringstream
 
-bool BUMBLEBEE=true; //set to true for debug statements
+bool BUMBLEBEE=false; //set to true for debug statements
 
 template <class T>
 int btree<T>::getNumLevels()
@@ -142,7 +142,7 @@ void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {//need special case 
                     int childNumPtrs = child->getNumChilds();
                     int childNumKeys = child->getNumKeys();
                     for (int i=0; i < childNumPtrs; i++){
-                        rightSibling->InsertChildAtIndex(child->getChild(childNumPtrs-1-i),0);
+                        rightSibling->insertChildAtIndex(child->getChild(childNumPtrs-1-i),0);
                     }
                     for (int i=0; i < childNumKeys; i++){
                         rightSibling->insertKeyAtIndex(child->getPair(childNumKeys-1-i),0);
@@ -219,14 +219,15 @@ void btree<T>::split(node<T>* current)//current becomes left node!
     if (current->getNumChilds()>0) { //if there are children, add last child
         right->addChildToBack(current->getChild(j));
     }
+    //remove tail from current (already added to "root" & right)
     unsigned int k = current->getNumKeys() - 1;
     for (; k>=median; k--) {
         if (BUMBLEBEE) {
             std::cout << "popped index " << k << ": " << current->getPair(k).second << "\n";
         }
         current->removeKey(k);
-        if (right->getNumChilds()>0) { //if there are children, remove them
-            current->removeChild(k);
+        if (current->getNumChilds()>0) { //if there are children, remove them
+            current->removeChild(k+1);
         }
     } //do not need to remove last child here
     if (BUMBLEBEE) {
@@ -245,13 +246,12 @@ void btree<T>::split(node<T>* current)//current becomes left node!
 		right->setParent(root);
 
     } else {
-        //current->parent->setLeaf(false);
         unsigned int idxToInsert = current->getParent()->getIndexToInsert(medianKey.first);//get index to insert key in parent
         current->getParent()->insertKeyAtIndex(medianKey,idxToInsert);//insert key into parent
         //child ptr to the left of the new key is the same as before so we don't need to do anything there
 
         //insert right ptr into correct position in parent (idxToInsert + 1)
-        current->getParent()->InsertChildAtIndex(right,idxToInsert + 1); //insert child in parent
+        current->getParent()->insertChildAtIndex(right,idxToInsert + 1); //insert child in parent
         //if the parent is full, we split the parent
         if (current->getParent()->getNumKeys() > current->getParent()->getMaxKeys()) {
             split(current->getParent());
@@ -288,11 +288,10 @@ template <class T>
 void btree<T>::breadthFirstLevel(int level)
 {
     if (root==nullptr) return;
-    int lvl=0;
     std::queue<std::pair<node<T>*,int> > qu; //create queue
     std::pair<node<T>*,int> sp;
     sp.first = root;
-    sp.second = lvl;
+    sp.second = 0;
     qu.push(sp); //push root & level
     std::cout << level << ": | ";
     while (!qu.empty()) { //print items at front of queue
@@ -305,11 +304,10 @@ void btree<T>::breadthFirstLevel(int level)
             std::cout << "| ";
         }
         qu.pop();
-        lvl++;
         for (i=0; i<sp.first->getNumChilds(); i++) {
             std::pair<node<T>*,int> cp;
             cp.first = sp.first->getChild(i);
-            cp.second = lvl;
+            cp.second = sp.second+1;
             qu.push(cp); //push child node & level
         }
     }
@@ -390,7 +388,7 @@ template <class T>
 void btree<T>::readIn(std::string textfile)
 {
     std::ifstream inputfile(textfile); //read file
-    std::pair<unsigned int,std::string> sp; //variable to insert into tree
+    std::pair<unsigned int,T> sp; //variable to insert into tree
 
     if (inputfile.is_open()) {
         //while(inputfile.good()) {

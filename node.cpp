@@ -1,7 +1,7 @@
 #include <limits>
 #include "node.h"
 
-bool LADYBUG=true; //set to true for debug statements
+bool LADYBUG=false; //set to true for debug statements
 
 template <class T>
 node<T>::node(unsigned int dgree)
@@ -235,10 +235,25 @@ template <class T>
 void node<T>::addKeyToBack(std::pair<unsigned int,T> &pear) {
     keys.push_back(pear); //add pair to key vector
 }
+
 template <class T>
-void node<T>::InsertChildAtIndex(node* child, unsigned int i)
+void node<T>::insertKeyAtIndex(std::pair<unsigned int,T> pear, unsigned int i)
 {
-    childs.insert(childs.begin()+i, child);
+    if (i<keys.size()) {
+        keys.insert(keys.begin()+i, pear);
+    } else {
+        keys.push_back(pear);
+    }
+}
+
+template <class T>
+void node<T>::insertChildAtIndex(node* child, unsigned int i)
+{
+    if (i<childs.size()) {
+        childs.insert(childs.begin()+i, child);
+    } else {
+        childs.push_back(child);
+    }
 }
 
 //print data values in a node
