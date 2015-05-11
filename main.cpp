@@ -57,12 +57,57 @@ int main(int argc, char *argv[])
     btree<int> notTheBees(3);
     /*notTheBees.readIn("./in.txt");
     notTheBees.writeFile("./out.txt");
-    notTheBees.breadthFirstLevels();*/
+    notTheBees.breadthFirstLevels();
+    notTheBees.inOrder();*/
 
     std::pair<unsigned int,int> sp;
     int n;
 
-    n=124;
+    n=185;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=38;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=162;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=5;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=147;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=43;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=185;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=20;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=155;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=73;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=179;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=88;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=162;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=182;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=89;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=19;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=92;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=147;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=46;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=160;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=57;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=120;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=89;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=55;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=125;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=84;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=153;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=137;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=109;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=107;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=184;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=128;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=59;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+    n=104;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
+
+    n=105;
+    sp.first=n;
+    sp.second=n;
+    notTheBees.insert(sp);
+    std::cout<<"\ninserted "<<n<<":\n";
+    notTheBees.breadthFirstLevels();
+    notTheBees.inOrder();
+    std::cout<<"\n";
+
+    /*n=124;
     sp.first=n;
     sp.second=n;
     notTheBees.insert(sp);
@@ -280,7 +325,7 @@ int main(int argc, char *argv[])
     notTheBees.breadthFirstLevels();
     notTheBees.breadthFirst();
     notTheBees.inOrder();
-    std::cout << "\n";
+    std::cout << "\n";*/
 
     //iAmNoLongerCoveredInBees.inOrder();
     /*std::random_shuffle(vect.begin(),vect.end());

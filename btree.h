@@ -29,6 +29,7 @@ public:
     void breadthFirst();
     void breadthFirstLevel(int level);
     void breadthFirstLevels(); //for testing purposes only, horribly inefficient
+    void updateParents(node<T> *nd);
     std::pair<bool,T> search(unsigned int keyValue);
     void deleteKey(unsigned int keyVal);
     void readIn(std::string textfile);
