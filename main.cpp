@@ -1,4 +1,17 @@
 #include <QApplication>
+#include <QLabel>
+#include <QPixmap>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QHBoxLayout> //horizontal box layout
+#include <QVBoxLayout> //vertical box layout
+#include <QGroupBox> //group radio buttons
+#include <QRadioButton>
+#include <QSlider>
+#include <QSpinBox>
+#include <QString>
+#include <QLineEdit>
+#include <QFontMetrics>
 #include "mainwindow.h"
 #include "btree.h"
 #include <iostream>
@@ -41,7 +54,7 @@ int main(int argc, char *argv[])
     imCoveredInBees.deleteKey(9);
     imCoveredInBees.breadthFirstLevels();
 */
-    btree<int> iAmNoLongerCoveredInBees(3);
+    /*btree<int> iAmNoLongerCoveredInBees(3);
     std::vector< std::pair<unsigned int,int> > vect;
     for (int i=0; i < 40; i++) {
         int num = rand() % 200;//generate random number between 1 and 50
@@ -63,7 +76,7 @@ int main(int argc, char *argv[])
         std::cout << "\n";
         vect.pop_back();
 
-    }
+    }*/
 
 
 

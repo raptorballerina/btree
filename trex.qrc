@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>images/trex_write.jpg</file>
+    </qresource>
+</RCC>

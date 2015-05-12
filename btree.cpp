@@ -341,6 +341,43 @@ void btree<T>::breadthFirst()
 }
 
 template <class T>
+std::vector<std::vector<int> > btree<T>::getArraysAtLevel(int level)
+{
+    std::vector<std::vector<int> > outer;
+    std::vector<int> inner;
+    if (root==nullptr) return outer;
+    std::queue<std::pair<node<T>*,int> > qu; //create queue
+    std::pair<node<T>*,int> sp;
+    sp.first = root;
+    sp.second = 0;
+    qu.push(sp); //push root & level
+
+    while (!qu.empty()) { //print items at front of queue
+        std::pair<node<T>*,int> sp = qu.front();
+        unsigned int i=0; //iterator
+        if (sp.second==level) { //only print if levels match
+            for (; i<sp.first->getNumKeys(); i++) {
+                //insert into inner vector
+                inner.reserve(inner.size()+1);
+                inner.push_back(sp.first->getKeyVal(i));
+            }
+            //insert into outer vector
+            outer.reserve(outer.size()+1);
+            outer.push_back(inner);
+            inner.clear();
+        }
+        qu.pop();
+        for (i=0; i<sp.first->getNumChilds(); i++) {
+            std::pair<node<T>*,int> cp;
+            cp.first = sp.first->getChild(i);
+            cp.second = sp.second+1;
+            qu.push(cp); //push child node & level
+        }
+    }
+    return outer;
+}
+
+template <class T>
 void btree<T>::breadthFirstLevel(int level)
 {
     if (root==nullptr) return;

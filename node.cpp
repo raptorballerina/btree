@@ -1,7 +1,7 @@
 #include <limits>
 #include "node.h"
 
-bool LADYBUG=false; //set to true for debug statements
+#define LADYBUG 0 //set to true for debug statements
 
 template <class T>
 node<T>::node(unsigned int dgree)

@@ -34,6 +34,7 @@ public:
     void deleteKey(unsigned int keyVal);
     void readIn(std::string textfile);
     void writeFile(std::string textfile);
+    std::vector<std::vector<int> > getArraysAtLevel(int level);
 private:
     //properties:
     node<T> *root;
