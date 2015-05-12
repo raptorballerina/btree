@@ -149,11 +149,11 @@ void MainWindow::readSlot()
 void MainWindow::writeSlot()
 {
     if (beetree->getNumLevels()==0) return;
-    beetree->writeFile("out.txt");
+    beetree->writeFile("./out.txt");
     QGraphicsScene *scn = new QGraphicsScene();
     QGraphicsView *vw = new QGraphicsView(scn);
     QGraphicsPixmapItem *itm = new QGraphicsPixmapItem(*(new QPixmap(":img/images/trex_write.jpg")));
-    vw->setFixedSize(600,276);
+    vw->setFixedSize(604,280);
     scn->addItem(itm);
     vw->show();
 }
