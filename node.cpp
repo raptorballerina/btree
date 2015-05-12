@@ -55,20 +55,22 @@ void node<T>::addChildToBack(node* child)
 template <class T>
 unsigned int node<T>::getIndexToInsert(unsigned int keyValue)
 {
+ //   std::cout << "entered getIndexToInsert w/ keyValue " << keyValue << std::endl;
     int lo=0;
     int hi=keys.size()-1;
     unsigned int idx=0;
     while (lo<=hi) {
         idx=(lo+hi)/2;
-        if (keyValue<=keys[idx].first) {
+        if (keyValue<=keys[idx].first) {//segfaulting here????????
             hi=idx-1;
         } else { //keyValue>keys[idx].first
             lo=idx+1;
         }
     }
     if (LADYBUG) {
-        std::cout << "in get index, value " << keyValue << " at index " << lo << "\n";
+    //    std::cout << "in get index, value " << keyValue << " at index " << lo << "\n";
     }
+  //  std::cout << "leaving getIndexToInsert w/ keyValue " << keyValue << std::endl;
     return lo;
 }
 
@@ -98,6 +100,7 @@ std::pair<unsigned int,T> node<T>::getPair(unsigned int index)
 template <class T>
 node<T>* node<T>::getChild(unsigned int index)
 {
+//    if (LADYBUG) std::cout << "in getChild w/ index " << index << std::endl;
     if (index<childs.size()) {
         return childs[index];
     } else { //index>=childs.size()
@@ -112,8 +115,9 @@ node<T>* node<T>::getChild(unsigned int index)
 template <class T>
 T node<T>::getData(unsigned int keyValue)
 {
+
     unsigned int index=getIndexToInsert(keyValue);
-    if (index>=keys.size()) { //check the size first so that it won't seg fault
+    if (index>=keys.size() || index < 0) { //check the size first so that it won't seg fault
         if (LADYBUG) {
             std::cout << "in getkeydata, nothing found for keyvalue " << keyValue << "\n";
         }
@@ -180,8 +184,13 @@ int node<T>::searchNode(unsigned int keyValue)
 template <class T>
 bool node<T>::removeKey(unsigned int index)
 {
+    if (LADYBUG) std::cout << "Index we're trying to remove in removeKey=" << index << std::endl;
+    if (LADYBUG) std::cout << "keys.size() in removeKey=" << keys.size() << std::endl;
+    if (LADYBUG) std::cout << "At index " << index << ": " << keys[index].first << std::endl;
     if (index<keys.size()) {
+        if (LADYBUG) std::cout << "Got inside the if in remove key!" << std::endl;
         keys.erase(keys.begin()+index);
+        if (LADYBUG) std::cout << "Got past keys.erase in remove key!" << std::endl;
         return true;
     } else {
         if (LADYBUG) {

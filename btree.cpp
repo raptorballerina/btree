@@ -2,7 +2,6 @@
 #include <fstream> //ifstream
 #include <sstream> //stringstream
 
-bool BUMBLEBEE=false; //set to true for debug statements
 
 template <class T>
 int btree<T>::getNumLevels()
@@ -26,9 +25,20 @@ void btree<T>::deleteKey(unsigned int keyVal) {
 
 template <class T>
 void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {//need special case for deletion from root
+    if (LADYBUG) std::cout << "in deleteKey: keyVal = " << keyVal << std::endl;
+    if (LADYBUG) std::cout << "array: ";
+    if (LADYBUG) {
+        for (int i=0; i < nd->getNumKeys(); i++)
+            std::cout << nd->getKeyVal(i) << " ";
+        std:: cout << std::endl;
+    }
+    if (nd == nullptr) std::cout << "nd is null! nd is null! nd is null!\n";
     unsigned int idx;
     if ((idx = nd->searchNode(keyVal)) != -1) {//if the key we're looking for is in current node
+    if (LADYBUG)std::cout << "keyVal in current node\n";
+
         if (nd->isLeaf()) {
+            if (LADYBUG) std::cout << "case 1\n";
             for (unsigned int i=0; i<nd->getNumKeys(); i++) {
                 if (nd->getPair(i).first == keyVal) {//delete key
                     nd->removeKey(i);
@@ -36,20 +46,24 @@ void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {//need special case 
                 }
             }
         } else {
+            if (LADYBUG) std::cout << "case 2";
             //if childs[i] has  <= t keys, replace the key we want to get rid of w/ last key of that node and recursively delete it from that node
             node<T>* leftChild = nd->getChild(nd->getIndexToInsert(keyVal));
             node<T>* rightChild = nd->getChild(nd->getIndexToInsert(keyVal)+1);
             std::pair<unsigned int,T> temp;
             if (leftChild->getNumKeys() >= degree){
+                if (LADYBUG) std::cout << "a\n";
                 temp = leftChild->getPair(leftChild->getNumKeys()-1);
                 nd->setKey(idx,temp);
 
                 deleteKey(leftChild->getPair(leftChild->getNumKeys()-1).first,leftChild);
             } else if (rightChild->getNumKeys() >= degree){ //if childs[i] has < t keys, do pretty much the same thing with the right child except we get the leftmost key instead
+                if (LADYBUG) std::cout << "b\n";
                 temp = rightChild->getPair(0);
                 nd->setKey(idx,temp);
                 deleteKey(rightChild->getKeyVal(0),rightChild);
             } else {
+                if (LADYBUG) std::cout << "c\n";
                 //if right and left children both have t-1 keys:
                 //move the key we want to delete and everything in rightChild to leftChild, deleting ptr to rightChild from nd
                 //recursively delete key we want to delete from leftChild
@@ -75,40 +89,71 @@ void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {//need special case 
             }
         }
     } else {//if the key we want to delete is not in the current node
+        if (LADYBUG) std::cout << "3";
         unsigned int idxToTraverse = nd->getIndexToInsert(keyVal);
-        node<T>* child = nd->getChild(idxToTraverse);
-        if (child->getNumKeys() >= degree)
-            deleteKey(keyVal,child);
+        if (LADYBUG) std::cout << "idxToTraverse = " << idxToTraverse << std::endl;
+        node<T>* child = nd->getChild(idxToTraverse);//child we'd traverse to
+        if (child->getNumKeys() >= degree){//if child has >= t keys, just call delete on that
+            if (LADYBUG) std::cout << "\n";
+            deleteKey(keyVal,child);}
         else {
             /*if a node to the left or right of child has >= t keys, move a key from nd down to into
              *child, move a key from the left/right sibling into nd, and move the correct
              *child ptr from the left or right into child */
 
             if ((nd->getChild(idxToTraverse-1) != nullptr)
-                    && (nd->getChild(idxToTraverse-1)->getNumKeys() >= degree)) {
+                    && (nd->getChild(idxToTraverse-1)->getNumKeys() >= degree)) {//if there's a left child w/ >= t keys
+                if (LADYBUG) std::cout << "a left\n";
                 node<T>* leftSibling = nd->getChild(idxToTraverse-1);
+                if (LADYBUG) std::cout << "set left sibling\n";
                 //move key at idxToTraverse in nd to child
-                child->insertKeyIntoNode(nd->getPair(idxToTraverse));
+                child->insertKeyIntoNode(nd->getPair(idxToTraverse));//move key from nd down into child
+                if (LADYBUG) std::cout << "moved key from nd to child";
                 nd->removeKey(idxToTraverse);
-                //move key from left sibling into child
-                child->insertKeyIntoNode(leftSibling->getPair(leftSibling->getNumKeys() - 1));
+                if (LADYBUG) std::cout << "removed moved key from nd" << std::endl;
+
+
+                //WRONG! Need to move from left sibling to nd instead
+                //move key from left sibling into child.
+ /*               child->insertKeyIntoNode(leftSibling->getPair(leftSibling->getNumKeys() - 1));
+                std::cout << "inserted second key into node" << std::endl;
                 leftSibling->removeKey(leftSibling->getNumKeys()-1);
+                std::cout << "removed key\n";
+*/
+                nd->insertKeyIntoNode(leftSibling->getPair(leftSibling->getNumKeys()-1));
+                if (LADYBUG) std::cout << "inserted key from left sibling into nd\n";
+                leftSibling->removeKey(leftSibling->getNumKeys()-1);
+                if (LADYBUG) std::cout << "removed key we moved from left sibling to nd\n";
+
                 //move child ptr from lef-t sibling into child
-                child->InsertChildAtIndex(leftSibling->getChild(leftSibling->getNumChilds()-1),0);
+                child->insertChildAtIndex(leftSibling->getChild(leftSibling->getNumChilds()-1),0);
+                if (LADYBUG) std::cout << "moved child ptr from left sibling into child\n";
+                if (LADYBUG) std::cout << "inserted child at index\n";
                 leftSibling->removeChild(leftSibling->getNumChilds()-1);
+                if (LADYBUG) std::cout << "removed child\n";
             } else if ((nd->getChild(idxToTraverse+1) != nullptr)
                        && (nd->getChild(idxToTraverse+1)->getNumKeys() >= degree)){
+                if (LADYBUG) std::cout << "a right\n";
                 node<T>* rightSibling = nd->getChild(idxToTraverse+1)   ;
                 //move key at idxToTraverse in nd to child
                 child->insertKeyIntoNode(nd->getPair(idxToTraverse));
+                if (LADYBUG) std::cout << "Got up to line 139's removeKey" << std::endl;
                 nd->removeKey(idxToTraverse);
+                if (LADYBUG) std::cout << "Got past removeKey!" << std::endl;
                 //move key from right sibling into child
-                child->insertKeyIntoNode(rightSibling->getPair(0));
+                nd->insertKeyIntoNode(rightSibling->getPair(0));
+                if (LADYBUG) std::cout << "inserted leftmost key from right sibling into nd\n";
                 rightSibling->removeKey(0);
+                if (LADYBUG) std::cout << "removed leftmost key from right sibling\n";
                 //move child ptr from right sibling into child
+
                 child->addChildToBack(rightSibling->getChild(0));
-                rightSibling->removeChild(0);
+                if (LADYBUG) std::cout << "got past addChildToBack" << std::endl;
+                if (LADYBUG) std::cout << "right sibling numchilds=" << rightSibling->getNumChilds() << std::endl;
+  //             rightSibling->removeChild(0);
+                if (LADYBUG) std::cout << "got past removeChild!\n";
             } else {
+                if (LADYBUG) std::cout << "b\n";
                 /*child and its siblings all have t-1 keys
                  *we merge child w/ one of its siblings
                  *this "involves" moving a key from x into the merged node as new median */
@@ -140,13 +185,15 @@ void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {//need special case 
                     nd->removeKey(idxToTraverse);
                     //move all keys and children in child to front of right
                     int childNumPtrs = child->getNumChilds();
+                    if (LADYBUG) std::cout << "set childNumPtrs" << std::endl;
                     int childNumKeys = child->getNumKeys();
+                    if (LADYBUG) std::cout << "setChildNumKeys" << std::endl;
                     for (int i=0; i < childNumPtrs; i++){
                         rightSibling->insertChildAtIndex(child->getChild(childNumPtrs-1-i),0);
-                    }
+                    } if (LADYBUG) std::cout << " set right sibling childs " << std::endl;
                     for (int i=0; i < childNumKeys; i++){
                         rightSibling->insertKeyAtIndex(child->getPair(childNumKeys-1-i),0);
-                    }
+                    } if (LADYBUG) std::cout << " set right sibling keys" << std::endl;
                     //delete child node and remove ptr to child from nd
                     delete child;
                     nd->removeChild(idxToTraverse);
@@ -157,6 +204,7 @@ void btree<T>::deleteKey(unsigned int keyVal, node<T>* nd) {//need special case 
                     delete root->getParent();
                     root->setParent(nullptr);
                 }
+                if (LADYBUG) std::cout << "got to deletekey" << std::endl;
                 deleteKey(keyVal,nd->getNodeToTraverse(keyVal));
             }
         }
@@ -169,7 +217,7 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
     if (root==nullptr) {
         node<T> *nd = new node<T>(degree,pear);
         root = nd;
-        if (BUMBLEBEE) {
+        if (LADYBUG) {
             std::cout << "in insert, we are creating a root\n";
             std::cout << "  root node: " << nd->getNumKeys() << " keys, " <<
                          nd->getNumChilds() << " childs\n";
@@ -187,7 +235,7 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
             itr->insertKeyAtIndex(pear,idx);//insert key in the correct position
         }
         if (itr->getNumKeys() > itr->getMaxKeys()) {//if too many keys in node, split
-            if (BUMBLEBEE) {
+            if (LADYBUG) {
                 std::cout << "in insert, we are not creating a root\n";
                 std::cout << "  in node: " << itr->getNumKeys() << " keys, " <<
                              itr->getNumChilds() << " childs\n";
@@ -200,7 +248,7 @@ void btree<T>::insert(std::pair<unsigned int,T> &pear)
 template <class T>
 void btree<T>::split(node<T>* current)//current becomes left node!
 {
-    if (BUMBLEBEE) {
+    if (LADYBUG) {
         std::cout << "in split (begin), current has " << current->getNumKeys() <<
                      " keys, " << current->getNumChilds() << " childs\n";
     }
@@ -226,7 +274,7 @@ void btree<T>::split(node<T>* current)//current becomes left node!
     //remove tail from current (already added to "root" & right)
     unsigned int k = current->getNumKeys() - 1;
     for (; k>=median; k--) {
-        if (BUMBLEBEE) {
+        if (LADYBUG) {
             std::cout << "popped index " << k << ": " << current->getPair(k).second << "\n";
         }
 
@@ -237,7 +285,7 @@ void btree<T>::split(node<T>* current)//current becomes left node!
         }
 
     } //do not need to remove last child here
-    if (BUMBLEBEE) {
+    if (LADYBUG) {
         std::cout << "in split, current has " << current->getNumKeys() << " keys, " <<
                      current->getNumChilds() << " childs\n";
     }
@@ -344,7 +392,7 @@ template <class T>
 void btree<T>::inOrder(node<T>* nd)
 {
     if (nd==nullptr) {
-        if (BUMBLEBEE) {
+        if (LADYBUG) {
             std::cout << "in inorder, nullptr found in child node\n";
         }
         return;
@@ -395,7 +443,7 @@ std::pair<bool,T> btree<T>::search(node<T>* nd, unsigned int keyValue)
             return search(nd->getChild(idx), keyValue);
         }
     } else { // idx > nd->getNumKeys
-        if (BUMBLEBEE) {
+        if (LADYBUG) {
             std::cout << "in search, getindex stepped out of bounds\n";
         }
         return std::make_pair<bool,T>(false,T());

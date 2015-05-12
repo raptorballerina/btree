@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     imCoveredInBees.deleteKey(9);
     imCoveredInBees.breadthFirstLevels();
 */
-    /*btree<int> iAmNoLongerCoveredInBees(3);
+    btree<int> iAmNoLongerCoveredInBees(3);
     std::vector< std::pair<unsigned int,int> > vect;
     for (int i=0; i < 40; i++) {
         int num = rand() % 200;//generate random number between 1 and 50
@@ -51,16 +51,30 @@ int main(int argc, char *argv[])
         std::cout << "Inserting " << num << std::endl;
         iAmNoLongerCoveredInBees.insert(definitelyNotABee);
         iAmNoLongerCoveredInBees.breadthFirstLevels();
-        iAmNoLongerCoveredInBees.inOrder();
-    }*/
+//        iAmNoLongerCoveredInBees.inOrder();
+    }
 
-    btree<int> notTheBees(3);
+
+    std::random_shuffle(vect.begin(),vect.end());
+    while (!vect.empty()){
+        std::cout << "Deleting " << vect[vect.size()-1].first << std::endl;
+        iAmNoLongerCoveredInBees.deleteKey(vect[vect.size()-1].first);
+        iAmNoLongerCoveredInBees.breadthFirstLevels();
+        std::cout << "\n";
+        vect.pop_back();
+
+    }
+
+
+
+
+//    btree<int> notTheBees(3);
     /*notTheBees.readIn("./in.txt");
     notTheBees.writeFile("./out.txt");
     notTheBees.breadthFirstLevels();
     notTheBees.inOrder();*/
 
-    std::pair<unsigned int,int> sp;
+/*    std::pair<unsigned int,int> sp;
     int n;
 
     n=185;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
@@ -99,15 +113,7 @@ int main(int argc, char *argv[])
     n=104;	sp.first=n; sp.second=n; notTheBees.insert(sp);	std::cout<<"\ninserted "<<n<<":\n"; notTheBees.breadthFirstLevels(); notTheBees.inOrder(); std::cout<<"\n";
 
     //iAmNoLongerCoveredInBees.inOrder();
-    /*std::random_shuffle(vect.begin(),vect.end());
-    while (!vect.empty()){
-        std::cout << "Deleting" << vect[vect.size()-1].first << std::endl;
-        iAmNoLongerCoveredInBees.deleteKey(vect[0].first);
-        iAmNoLongerCoveredInBees.breadthFirstLevels();
-        std::cout << "\n";
-        vect.pop_back();
 
-    }*/
     //go through vector of pairs and delete each one, printing breadthFirstLevels after each deletion
 
     //test by inserting random numbers between 1 and 50, then deleting some of them
