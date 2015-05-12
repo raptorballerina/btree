@@ -13,6 +13,8 @@
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
 #include <QPixmap>
+#include <QUrl>
+#include <QDesktopServices>
 
 
 #include "btree.h"
@@ -29,6 +31,7 @@ public slots:
     void insertSlot();
     void readSlot();
     void writeSlot();
+    void openfileSlot();
     void searchSlot();
     void deleteSlot();
 
@@ -51,6 +54,8 @@ private:
 
     QPushButton *insertButton, *searchButton, *deleteButton, *readButton, *writeButton;
     QLineEdit *insertKeyText, *insertDataText, *searchText, *deleteText;
+
+    QGraphicsView *vw;
 
     btree<std::string> *beetree;
 

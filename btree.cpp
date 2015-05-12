@@ -508,32 +508,53 @@ template <class T>
 void btree<T>::writeFile(std::string textfile)
 {
     if (root!=nullptr) {
-        writeFile(root, textfile, true);
+        std::ofstream outfile;
+        outfile.open(textfile);
+        writeFile(root, textfile, outfile);
+        outfile.close();
     }
 }
 
 template <class T>
-void btree<T>::writeFile(node<T>* nd, std::string textfile, bool overwrite)
+void btree<T>::writeFile(node<T>* nd, std::string textfile, std::ofstream& outfile)
 {
     if (nd==nullptr) {
         return;
     }
     bool leaf = nd->isLeaf();
     unsigned int i=0;
-    std::ofstream outfile; //file to write to
-    if (overwrite) {
-        outfile.open(textfile, std::ios::out); //overwrite the file
-    }
-    outfile.close();
-    outfile.open(textfile, std::ios::app); //append to end of file
+//    std::ofstream outfile; //file to write to
+ //   if (overwrite) {
+   //     outfile.open(textfile, std::ios::out); //overwrite the file
+   // }
+    //outfile.close();
+   // outfile.open(textfile, /*std::ios::app*/std::ofstream::out); //append to end of file
     for (; i<nd->getNumKeys(); i++) { //print data values in node
         if (!leaf) {
-            writeFile(nd->getChild(i), textfile, false); //run in order on child pointer if not leaf
+            writeFile(nd->getChild(i), textfile, outfile); //run in order on child pointer if not leaf
         }
         outfile << nd->getPair(i).first << " " << nd->getPair(i).second << std::endl;
     }
     if (!leaf) {
-        writeFile(nd->getChild(i), textfile, false); //in order on last child pointer if not leaf
+        writeFile(nd->getChild(i), textfile, outfile); //in order on last child pointer if not leaf
     }
     outfile.close();
+}
+template <class T>
+btree<T>::~btree()
+{
+    if (root!=nullptr) {
+        uproot(root);
+    }
+}
+
+template <class T>
+void btree<T>::uproot(node<T> *nd)
+{
+    for (unsigned int i=0; i<nd->getNumChilds(); i++) {
+        if (!nd->isLeaf()) {
+            uproot(nd->getChild(i));
+        }
+    }
+    delete nd;
 }

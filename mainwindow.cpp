@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     searchText->setFixedWidth(50);
     deleteText->setFixedWidth(50);
 
+    //userfunctionLayout->
     userfunctionLayout->addWidget(insertKeyText);
     userfunctionLayout->addWidget(insertDataText);
     userfunctionLayout->addWidget(insertButton);
@@ -40,10 +41,18 @@ MainWindow::MainWindow(QWidget *parent) :
     userfunctionLayout->addWidget(writeButton);
 
     connect(insertButton, SIGNAL(clicked()), this, SLOT(insertSlot()));
+    connect(insertKeyText, SIGNAL(returnPressed()), this, SLOT(insertSlot()));
+    connect(insertDataText, SIGNAL(returnPressed()), this, SLOT(insertSlot()));
+
     connect(readButton, SIGNAL(clicked()), this, SLOT(readSlot()));
     connect(writeButton, SIGNAL(clicked()), this, SLOT(writeSlot()));
+
     connect(searchButton, SIGNAL(clicked()), this, SLOT(searchSlot()));
+    connect(searchText, SIGNAL(returnPressed()), this, SLOT(searchSlot()));
+
     connect(deleteButton, SIGNAL(clicked()),this,SLOT(deleteSlot()));
+    connect(deleteText, SIGNAL(returnPressed()), this, SLOT(deleteSlot()));
+
     mainLayout->addLayout(userfunctionLayout);
     mainLayout->addLayout(treeLayout);
 
@@ -142,6 +151,8 @@ void MainWindow::insertSlot()
 void MainWindow::readSlot()
 {
     if (beetree->getNumLevels()==0) return;
+    delete beetree;
+    beetree = new btree<std::string>(3);
     beetree->readIn("./in.txt");
     plantTree();
 }
@@ -151,11 +162,22 @@ void MainWindow::writeSlot()
     if (beetree->getNumLevels()==0) return;
     beetree->writeFile("./out.txt");
     QGraphicsScene *scn = new QGraphicsScene();
-    QGraphicsView *vw = new QGraphicsView(scn);
+    vw = new QGraphicsView(scn);
     QGraphicsPixmapItem *itm = new QGraphicsPixmapItem(*(new QPixmap(":img/images/trex_write.jpg")));
     vw->setFixedSize(604,280);
     scn->addItem(itm);
+
+    QPushButton *openButton = new QPushButton(vw);
+    openButton->setText("Open");
+    openButton->setGeometry(400,180,130,30);
+    this->connect(openButton, SIGNAL(clicked()), this, SLOT(openfileSlot()));
     vw->show();
+}
+
+void MainWindow::openfileSlot()
+{
+    vw->close();
+    QDesktopServices::openUrl(QUrl("./out.txt"));
 }
 
 MainWindow::~MainWindow()

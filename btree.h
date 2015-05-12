@@ -35,6 +35,7 @@ public:
     void readIn(std::string textfile);
     void writeFile(std::string textfile);
     std::vector<std::vector<int> > getArraysAtLevel(int level);
+    ~btree();
 private:
     //properties:
     node<T> *root;
@@ -43,7 +44,8 @@ private:
     std::pair<bool,T> search(node<T> *nd, unsigned int keyValue); //recursive search
     void inOrder(node<T>* nd); //recursive print
     void deleteKey(unsigned int keyVal, node<T>* nd);
-    void writeFile(node<T> *nd,std::string textfile,bool overwrite); //recursive write
+    void writeFile(node<T> *nd,std::string textfile, std::ofstream &outfile); //recursive write
+    void uproot(node<T> *nd); //recursive delete
 };
 
 #include "btree.cpp"
