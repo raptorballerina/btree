@@ -1,0 +1,3 @@
+GUI doesn't reflect full capabilities of data structure - sets the default degree to 3, only displays the keys
+    But the write/read functions handle the values properly
+Possible room for improvement: Add these features to the GUI
