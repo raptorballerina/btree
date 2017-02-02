@@ -26,3 +26,6 @@ QMAKE_CXXFLAGS += -std=c++11
 
 RESOURCES += \
     trex.qrc
+
+DISTFILES += \
+    Notes.txt
